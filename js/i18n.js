@@ -25,13 +25,12 @@ ko: {
   result: {
     scanning: "1개 데이터베이스와 대조 중…",
     matchTitle: "Elon match",
-    matchSub: "4문항 모두 일치. 이건 우연이 아닙니다.",
+    matchSub: "네 번의 선택이 모두 일치. 이건 우연이 아닙니다.",
     noTitle: "No match found out of 1 database",
     noSub: "일치하는 항목을 찾지 못했습니다.",
     see: "엔딩 보기"
   },
   choiceTitle: "당신의 선택은?",
-  choiceNote: "(당신이 고른 답)",
   replay: "다시 플레이",
   badTags: ["BAD ENDING 1 · 컨설팅 파산", "BAD ENDING 2 · 회의 무한 루프", "BAD ENDING 3 · 로봇 박물관", "BAD ENDING 4 · 완공 파산"],
   trueTag: "TRUE ENDING",
@@ -89,12 +88,16 @@ ko: {
       ["engineer", "대표님, 정문에 종이 한 장이 붙어 있는데요…"],
       ["narrator", "리본을 자르기 직전, 문에 붙은 것은 파산 공고였습니다."] ]
   ],
-  matchLines: [
-    ["narrator", "당신의 네 가지 선택은 일론의 선택과 같았습니다. 당신도 이 테스트의 함정을 피했습니다."],
+  matchOpen: [
+    ["narrator", "당신의 네 가지 선택은 일론의 선택과 같았습니다. 당신도 이 테스트의 함정을 피했습니다."]
+  ],
+  replies: [
     ["elon", "집엔 안 갑니다. 여기서 먹고 여기서 잡니다. 라인이 사는 날까지요."],
     ["elon", "보고서는 안 믿습니다. 라인을 제 발로 걸어서 직접 확인하겠습니다."],
     ["elon", "과도한 자동화는 실수였습니다. 제 실수예요. 로봇 일부는 걷어냅니다."],
-    ["elon", "공장 승인이요? 주차장에 텐트를 치세요. 거기가 새 라인입니다."],
+    ["elon", "공장 승인이요? 주차장에 텐트를 치세요. 거기가 새 라인입니다."]
+  ],
+  matchLines: [
     ["narrator", "몇 주 뒤, 텐트 안에서 새 조립 라인이 돌기 시작했습니다."],
     ["narrator", "2018년 6월의 마지막 주. Model 3가 처음으로 주당 약 5,000대 생산에 도달했습니다."],
     ["engineer", "대표님… 5,000대예요. 정말로요!"]
@@ -134,13 +137,12 @@ en: {
   result: {
     scanning: "Checking against 1 database…",
     matchTitle: "Elon match",
-    matchSub: "4 out of 4. This is no coincidence.",
+    matchSub: "Four choices, four matches. This is no coincidence.",
     noTitle: "No match found out of 1 database",
     noSub: "We could not find a matching profile.",
     see: "See the ending"
   },
-  choiceTitle: "What is your choice?",
-  choiceNote: "(your answer)",
+  choiceTitle: "Your choice?",
   replay: "Play again",
   badTags: ["BAD ENDING 1 · Consulted into Bankruptcy", "BAD ENDING 2 · The Infinite Meeting Loop", "BAD ENDING 3 · The Robot Museum", "BAD ENDING 4 · Built, Then Bankrupt"],
   trueTag: "TRUE ENDING",
@@ -198,12 +200,16 @@ en: {
       ["engineer", "Boss, there's a piece of paper taped to the front door…"],
       ["narrator", "Just before the ribbon was cut, the notice on the door turned out to be a bankruptcy filing."] ]
   ],
-  matchLines: [
-    ["narrator", "All four of your choices matched Elon's. You avoided every trap in this test."],
+  matchOpen: [
+    ["narrator", "All four of your choices matched Elon's. You avoided every trap in this test."]
+  ],
+  replies: [
     ["elon", "I'm not going home. I eat here, I sleep here, until the line lives."],
     ["elon", "I don't trust the reports. I'll walk the line myself and see."],
     ["elon", "Excessive automation was a mistake. My mistake. Pull out some of the robots."],
-    ["elon", "Factory approval? Put a tent in the parking lot. That's the new line."],
+    ["elon", "Factory approval? Put a tent in the parking lot. That's the new line."]
+  ],
+  matchLines: [
     ["narrator", "A few weeks later, a new assembly line began running inside the tent."],
     ["narrator", "The last week of June 2018. Model 3 production reached about 5,000 cars a week for the first time."],
     ["engineer", "Boss… that's 5,000. For real!"]

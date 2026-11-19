@@ -45,3 +45,7 @@ h1 em{font-style:normal;color:var(--gold);display:block;font-size:16px;letter-sp
 .end-box{display:flex;flex-direction:column;gap:10px;align-items:stretch}
 .tag{font-size:13px;letter-spacing:2px;color:var(--red);font-weight:800}
 .tag.ok{color:var(--green)}
+.dlg.choosing{cursor:default}
+.dlg.choosing .stack{gap:10px}
+.dlg.choosing .btn{font-size:17px;padding:14px 16px}
+.overlay{background:var(--bg);z-index:5}
