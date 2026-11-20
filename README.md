@@ -33,6 +33,16 @@ Layers bottom-up: background (object-fit cover, also behind the dialog), bg-fx, 
 `meeting-room` (intro + trust), `factory-night` (work-life), `automation-line`, `parking-dusk` (regulations), `bad-dark-factory` (BAD 1 trust), `bad-lobby` (BAD 2 work-life), `bad-robot-museum` (BAD 3), `bad-opening` (BAD 4), `tent-line`, `true-sky`.
 Wired with art so far: `meeting-room` + sprite `elon-neutral-a` (Elon at x 540 through intro and decision 1).
 
+## Logos (true ending)
+Official marks, bundled locally in `art/logo/` (no runtime external requests). They are trademarks of their owners, used here only in a fan-made parody (see the disclaimer on the ending screen).
+| file | source | licence note |
+|---|---|---|
+| `logo-x.svg` | https://commons.wikimedia.org/wiki/File:X_logo_2023.svg | public domain (Wikimedia Commons) |
+| `logo-spacex.svg` | https://commons.wikimedia.org/wiki/File:SpaceX_logo_black.svg | public domain (Wikimedia Commons) |
+| `logo-xai.svg` | https://commons.wikimedia.org/wiki/File:XAI_Logo.svg | CC BY-SA 4.0 on Commons; attribution: file uploaded to Wikimedia Commons (see the file page for the author) |
+| `logo-tesla.svg` | https://commons.wikimedia.org/wiki/File:Tesla_T_symbol.svg | public domain (Wikimedia Commons) |
+Direct files: `https://upload.wikimedia.org/wikipedia/commons/{c/ce/X_logo_2023.svg, 2/2e/SpaceX_logo_black.svg, 9/93/XAI_Logo.svg, b/bb/Tesla_T_symbol.svg}`. The black marks are shown white on the dark sky with a CSS filter; Tesla keeps its red.
+
 ## Notes
 - The consulting firm is deliberately unnamed.
 - Dialogue is satirical fiction except the facts listed in `../facts.md`; unverified items are marked TODO there.

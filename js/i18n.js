@@ -22,7 +22,9 @@ ko: {
       opts: ["네, 절차를 따릅니다", "아니요, 급하면 건너뜁니다"],
       short: ["절차를 따른다", "급하면 건너뛴다"] }
   ],
-  overlay: { thud: "쿵!" },
+  disclaimer: "팬이 만든 패러디입니다. Tesla, X, SpaceX, xAI와 무관합니다.",
+  overlay: { thud: "쿵!", date: "2018 · FREMONT", allGreen: "모두 순조 ✓", meeting: "회의 #{n}", autoOk: "자동화 순조 ✓", days: "365일", daysPlus: "365일 + α",
+             museum: "MUSEUM\n입장료: 로봇 1대", perWeek: "주당 {n}대" },
   choiceTitle: "당신의 선택",
   replay: "다시 플레이",
   badTags: ["BAD ENDING 2 · 컨설팅 파산", "BAD ENDING 1 · 회의 무한 루프", "BAD ENDING 3 · 로봇 박물관", "BAD ENDING 4 · 완공 파산"],
@@ -127,7 +129,9 @@ en: {
       opts: ["Yes, I follow the process", "No, I skip it when it's urgent"],
       short: ["Follow the process", "Skip it when urgent"] }
   ],
-  overlay: { thud: "THUD" },
+  disclaimer: "Fan-made parody. Not affiliated with Tesla, X, SpaceX or xAI.",
+  overlay: { thud: "THUD", date: "2018 · FREMONT", allGreen: "ALL GREEN ✓", meeting: "MEETING #{n}", autoOk: "AUTOMATION: ON TRACK ✓", days: "365 DAYS", daysPlus: "365 DAYS + α",
+             museum: "MUSEUM\nAdmission: 1 robot", perWeek: "{n} / week" },
   choiceTitle: "Your choice",
   replay: "Play again",
   badTags: ["BAD ENDING 2 · Consulted into Bankruptcy", "BAD ENDING 1 · The Infinite Meeting Loop", "BAD ENDING 3 · The Robot Museum", "BAD ENDING 4 · Built, Then Bankrupt"],

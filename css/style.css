@@ -56,9 +56,7 @@ h1 em{font-style:normal;color:var(--gold);display:block;font-size:16px;letter-sp
 @keyframes outl{to{opacity:0;margin-left:-14%}}
 @keyframes outr{to{opacity:0;margin-left:14%}}
 @keyframes fadeout{to{opacity:0}}
-.prop{position:absolute;transform:translate(-50%,-50%);height:auto}
-.in-pop{animation:pop .32s cubic-bezier(.34,1.56,.64,1) both}
-@keyframes pop{from{transform:translate(-50%,-50%) scale(0);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.prop{position:absolute;translate:-50% -50%;height:auto;user-select:none;pointer-events:none}
 .ovl{position:absolute;left:50%;top:14%;transform:translateX(-50%);color:#fff;font-weight:800;text-shadow:0 2px 8px #000}
 .shake{animation:shake .25s linear 1}
 @keyframes shake{20%{transform:translateY(-6px)}45%{transform:translateY(6px)}70%{transform:translateY(-3px)}}
@@ -90,3 +88,79 @@ h1 em{font-style:normal;color:var(--gold);display:block;font-size:16px;letter-sp
 @keyframes ovlpop{from{transform:translateX(-50%) scale(0);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
 .fshadow{position:absolute;left:50%;bottom:-1.2%;width:62%;height:4.2%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,0,0,.55) 0,rgba(0,0,0,.28) 45%,rgba(0,0,0,0) 72%);filter:blur(3px);pointer-events:none}
 .chr.land .fshadow{width:46%;height:6%;bottom:-2%}
+
+/* ---- props / logos / fx (positioned with the `translate` property, animated with transform/rotate/scale so they never conflict) ---- */
+.prop.in-pop,.fxi.in-pop{animation:popp .34s cubic-bezier(.34,1.56,.64,1) both}
+.prop.in-popbig{animation:poppbig .5s cubic-bezier(.34,1.3,.64,1) both}
+.prop.in-fade{animation:fade .45s ease both}
+.prop.in-drop{animation:dropp .5s cubic-bezier(.3,1.4,.5,1) both}
+.prop.in-fall{animation:fallp 1.2s cubic-bezier(.3,.1,.5,1) both}
+.prop.in-wipe{animation:wipep .6s ease-out both}
+.prop.in-slide-l{animation:slidepl .5s ease-out both}
+.prop.in-slide-r{animation:slidepr .5s ease-out both}
+.prop.out-exit-up{animation:exitup .4s ease-in forwards}
+.prop.out-exit-r{animation:exitr .5s ease-in forwards}
+@keyframes popp{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes poppbig{0%{transform:scale(0);opacity:0}65%{transform:scale(1.12);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes dropp{0%{transform:translateY(-70px);opacity:0}60%{transform:translateY(6px);opacity:1}100%{transform:none;opacity:1}}
+@keyframes fallp{from{transform:translateY(-300px);opacity:0}15%{opacity:1}to{transform:none;opacity:1}}
+@keyframes wipep{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes slidepl{from{transform:translateX(-90px);opacity:0}to{transform:none;opacity:1}}
+@keyframes slidepr{from{transform:translateX(90px);opacity:0}to{transform:none;opacity:1}}
+@keyframes exitup{to{transform:translateY(-50px);opacity:0}}
+@keyframes exitr{to{transform:translateX(160px);opacity:0}}
+.prop.loop-float{animation:floatp 3s ease-in-out infinite}
+.prop.loop-spin{animation:spinp 2.4s ease-in-out infinite}
+.prop.loop-spin2{animation:spinp 1.2s ease-in-out infinite}
+.prop.loop-wobble{animation:wobblep .5s ease-in-out 3}
+.prop.glow{filter:drop-shadow(0 0 10px rgba(233,196,106,.75)) drop-shadow(0 0 3px rgba(233,196,106,.9))}
+.prop.white{filter:invert(1) drop-shadow(0 0 8px rgba(0,0,0,.55))}
+.prop.white.glow{filter:invert(1) drop-shadow(0 0 10px rgba(233,196,106,.8))}
+.prop.dotted{filter:grayscale(1) contrast(.6);mix-blend-mode:screen}
+@keyframes floatp{50%{transform:translateY(-6px)}}
+@keyframes spinp{0%,100%{rotate:-6deg}50%{rotate:6deg}}
+@keyframes wobblep{25%{rotate:-6deg}75%{rotate:6deg}}
+.props{transition:filter .5s}
+.props.dim{filter:brightness(.6)}
+.fxi{position:absolute;translate:-50% -50%;height:auto;pointer-events:none}
+.fxi.in-spark{animation:sparkle .95s ease-out both}
+.fxi.in-twinkle{animation:twinkle 2.2s ease-in-out infinite}
+.fxi.in-puffi{animation:puffi .75s ease-out both}
+@keyframes sparkle{0%{transform:scale(.2) rotate(0);opacity:0}35%{transform:scale(1.1) rotate(25deg);opacity:1}100%{transform:scale(.8) rotate(60deg);opacity:0}}
+@keyframes twinkle{0%,100%{transform:scale(.5);opacity:.2}50%{transform:scale(1);opacity:1}}
+@keyframes puffi{from{transform:scale(.3);opacity:.9}to{transform:scale(1.5);opacity:0}}
+.ring{position:absolute;translate:-50% -50%;width:10%;aspect-ratio:1;border:3px solid #fff;border-radius:50%;animation:ringp .8s ease-out both;pointer-events:none}
+@keyframes ringp{from{transform:scale(.3);opacity:.9}to{transform:scale(2.6);opacity:0}}
+.alarm{position:absolute;translate:-50% -50%;width:46%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,40,40,.55) 0,rgba(255,40,40,.2) 45%,rgba(255,40,40,0) 70%);animation:alarmp .9s ease-in-out infinite;pointer-events:none}
+@keyframes alarmp{50%{opacity:.2}}
+.confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.confetti i{position:absolute;top:-4%;width:6px;height:10px;opacity:.95;animation:confall linear infinite}
+.confetti.gray i{filter:grayscale(1);animation-play-state:paused}
+@keyframes confall{to{transform:translateY(900px) rotate(540deg)}}
+.chip{font-size:15px;letter-spacing:.5px;white-space:pre-line;text-align:center;line-height:1.3;padding:5px 12px;border-radius:999px;background:rgba(14,17,26,.82);color:#ffe9a8;border:1px solid #6b5a2a;text-shadow:none;font-weight:800;transform:translateX(-50%)}
+.chip.qm{font-size:24px;padding:0 10px;background:#fff;color:#503F6E;border-color:#c8b8e2}
+.chip.in-pop{animation:ovlpop .32s cubic-bezier(.34,1.56,.64,1) both}
+.chip.in-slide-l{animation:chipl .4s ease-out both}
+.chip.out-exit-up{animation:chipup .4s ease-in forwards}
+@keyframes chipl{from{opacity:0;margin-left:-60px}to{opacity:1;margin-left:0}}
+@keyframes chipup{to{opacity:0;margin-top:-40px}}
+.bg-layer{transition:filter .9s ease,transform 1.2s ease}
+.beat-hint{position:absolute;left:50%;bottom:calc(4% + env(safe-area-inset-bottom));translate:-50% 0;color:#fff;font-size:26px;text-shadow:0 2px 8px #000;animation:blink 1s infinite;z-index:11;pointer-events:none}
+.disc{font-size:11px;line-height:1.4;color:var(--dim);text-align:center;margin-top:2px}
+.flash{position:absolute;inset:0;background:#fff;z-index:30;animation:flashp .15s ease-in both;pointer-events:none}
+@keyframes flashp{from{opacity:0}to{opacity:1}}
+/* pastel title + survey (bg-title, white wash, white card) */
+.pastel{background:#efe7f7 center/cover no-repeat;color:#503F6E}
+.pastel::before{content:"";position:absolute;inset:0;background:rgba(255,255,255,.35);pointer-events:none}
+.pastel>.card,.pastel>.progress,.pastel>.qwrap{position:relative}
+.pastel .card{background:rgba(255,255,255,.85);border-radius:22px;padding:26px 20px 22px;width:100%;box-shadow:0 6px 24px rgba(120,90,170,.18)}
+.pastel h1,.pastel .qtext{color:#503F6E}
+.pastel .sub-title{color:#8a6fb5}
+.pastel .dim,.pastel .qnum{color:#7b6a99}
+.pastel .btn{background:#F0E8FA;border:1px solid #C8B8E2;color:#503F6E}
+.pastel .btn:active{border-color:#FFAA96}
+.pastel .btn.lang{background:#FFAA96;border-color:#FFAA96;color:#4a2a22}
+.pastel .progress i{background:#d9cdee}.pastel .progress i.on{background:#FFAA96}
+.qicon{display:block;width:96px;height:96px;margin:0 auto 12px;animation:popp .34s cubic-bezier(.34,1.56,.64,1) both}
+.qicon.out{animation:exitup .22s ease-in forwards}
+.spark2{position:absolute;width:44px;height:auto;z-index:1}
