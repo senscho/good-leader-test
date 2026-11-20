@@ -22,14 +22,6 @@ ko: {
       opts: ["네, 절차를 따릅니다", "아니요, 급하면 건너뜁니다"],
       short: ["절차를 따른다", "급하면 건너뛴다"] }
   ],
-  result: {
-    scanning: "1개 데이터베이스와 대조 중…",
-    matchTitle: "Elon match",
-    matchSub: "4문항 모두 일치. 이건 우연이 아닙니다.",
-    noTitle: "No match found out of 1 database",
-    noSub: "일치하는 항목을 찾지 못했습니다.",
-    see: "엔딩 보기"
-  },
   choiceTitle: "당신의 선택",
   replay: "다시 플레이",
   badTags: ["BAD ENDING 1 · 컨설팅 파산", "BAD ENDING 2 · 회의 무한 루프", "BAD ENDING 3 · 로봇 박물관", "BAD ENDING 4 · 완공 파산"],
@@ -134,14 +126,6 @@ en: {
       opts: ["Yes, I follow the process", "No, I skip it when it's urgent"],
       short: ["Follow the process", "Skip it when urgent"] }
   ],
-  result: {
-    scanning: "Checking against 1 database…",
-    matchTitle: "Elon match",
-    matchSub: "4 out of 4. This is no coincidence.",
-    noTitle: "No match found out of 1 database",
-    noSub: "We could not find a matching profile.",
-    see: "See the ending"
-  },
   choiceTitle: "Your choice",
   replay: "Play again",
   badTags: ["BAD ENDING 1 · Consulted into Bankruptcy", "BAD ENDING 2 · The Infinite Meeting Loop", "BAD ENDING 3 · The Robot Museum", "BAD ENDING 4 · Built, Then Bankrupt"],

@@ -5,6 +5,8 @@
   var answers = [];       // {idx, elon, label}
   var order = [];         // per-question option order
   var timers = [];
+  /* story/survey order, as indexes into the i18n arrays: trust -> work-life -> tent -> automation */
+  var SEQ = [1, 0, 3, 2];
 
   function clear() { timers.forEach(clearTimeout); timers = []; }
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
@@ -36,22 +38,22 @@
   }
 
   /* ---------- questions ---------- */
-  function question(i) {
-    var q = L.questions[i];
+  function question(pos) {
+    var i = SEQ[pos], q = L.questions[i];
     var s = el("section", "screen");
     var p = el("div", "progress");
-    for (var k = 0; k < 4; k++) p.appendChild(el("i", k <= i ? "on" : ""));
+    for (var k = 0; k < 4; k++) p.appendChild(el("i", k <= pos ? "on" : ""));
     s.appendChild(p);
     var w = el("div", "qwrap");
-    w.appendChild(el("div", "qnum", L.qLabel + " " + (i + 1) + " / 4"));
+    w.appendChild(el("div", "qnum", L.qLabel + " " + (pos + 1) + " / 4"));
     w.appendChild(el("h2", "qtext", esc(q.q)));
     var st = el("div", "stack");
     order[i].forEach(function (oi) {
       var b = el("button", "btn", esc(q.opts[oi]));
       b.setAttribute("data-opt", oi === 1 ? "elon" : "trap");
       b.onclick = function () {
-        answers.push({ idx: i, elon: oi === 1, label: q.opts[oi], short: q.short[oi] });
-        if (i < 3) question(i + 1); else result();
+        answers[i] = { idx: i, elon: oi === 1, label: q.opts[oi] };
+        if (pos < 3) question(pos + 1); else story();
       };
       st.appendChild(b);
     });
@@ -59,56 +61,36 @@
     show(s);
   }
 
-  /* ---------- result ---------- */
-  function allElon() { return answers.every(function (a) { return a.elon; }); }
-  function result() {
-    var R = L.result, s = el("section", "screen center");
-    if (allElon()) {
-      s.innerHTML = '<div class="result-big match">' + esc(R.matchTitle) + '</div><div class="dim">' + esc(R.matchSub) + '</div>';
-      var b = el("button", "btn primary", esc(R.see)); b.onclick = ending;
-      var st = el("div", "stack"); st.appendChild(b); s.appendChild(st);
-      show(s);
-    } else {
-      s.innerHTML = '<div class="scan"></div><div class="dim">' + esc(R.scanning) + '</div>';
-      show(s);
-      timers.push(setTimeout(function () {
-        s.innerHTML = '<div class="result-big no">' + esc(R.noTitle) + '</div><div class="dim">' + esc(R.noSub) + '</div>';
-        timers.push(setTimeout(ending, 2600));
-      }, 1400));
-    }
-  }
-
   /* ---------- ending (visual novel) ---------- */
   function buildSteps() {
     var steps = [], bg = "scene-2018", t = "scene";
     L.intro.forEach(function (ln) { steps.push({ type: "line", bg: bg, kind: t, who: ln[0], text: ln[1] }); });
-    var wrong = -1;
-    answers.forEach(function (a, i) { if (!a.elon && wrong < 0) wrong = i; });
-    /* a decision point: situation line, then a single button = the answer the player gave in the survey */
-    function decision(i) {
-      var sit = L.situations[i];
+    /* one linear story: each decision point shows the situation, then a single button = the survey answer.
+       A wrong answer plays its bad ending right there and stops; a right one gets Elon's reaction, then the next decision. */
+    var ended = false;
+    SEQ.forEach(function (i) {
+      if (ended) return;
+      var sit = L.situations[i], a = answers[i];
       steps.push({ type: "line", bg: bg, kind: t, who: sit[0], text: sit[1] });
-      steps.push({ type: "choice", bg: bg, kind: t, pick: answers[i] });
-    }
-    if (wrong >= 0) {
-      decision(wrong);
-      L.bad[wrong].forEach(function (ln, k, arr) {
-        steps.push({ type: "line", bg: "bad-" + (wrong + 1), kind: "bad", who: ln[0], text: ln[1], tag: L.badTags[wrong], last: k === arr.length - 1 });
-      });
-    } else {
-      L.matchOpen.forEach(function (ln) { steps.push({ type: "line", bg: "match", kind: "match", who: ln[0], text: ln[1], tag: L.matchTag }); });
-      for (var i = 0; i < 4; i++) {
-        decision(i);
+      steps.push({ type: "choice", bg: bg, kind: t, pick: a });
+      if (!a.elon) {
+        L.bad[i].forEach(function (ln, k, arr) {
+          steps.push({ type: "line", bg: "bad-" + (i + 1), kind: "bad", who: ln[0], text: ln[1], tag: L.badTags[i], last: k === arr.length - 1 });
+        });
+        ended = true;
+      } else {
         steps.push({ type: "line", bg: bg, kind: t, who: L.replies[i][0], text: L.replies[i][1] });
       }
-      L.matchLines.forEach(function (ln) { steps.push({ type: "line", bg: "match", kind: "match", who: ln[0], text: ln[1], tag: L.matchTag }); });
+    });
+    if (!ended) {
+      L.matchOpen.concat(L.matchLines).forEach(function (ln) { steps.push({ type: "line", bg: "match", kind: "match", who: ln[0], text: ln[1], tag: L.matchTag }); });
       L.trueLines.forEach(function (ln) { steps.push({ type: "line", bg: "true-ending", kind: "true", who: ln[0], text: ln[1], tag: L.trueTag }); });
     }
     steps.push({ type: "end", bg: steps[steps.length - 1].bg, kind: steps[steps.length - 1].kind });
     return steps;
   }
 
-  function ending() {
+  function story() {
     var steps = buildSteps(), n = 0, curBg = null, typing = null;
     var s = el("section", "screen vn");
     var stage = el("div", "stage"), dlg = el("div", "dlg");
