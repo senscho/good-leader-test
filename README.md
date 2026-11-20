@@ -1,4 +1,4 @@
-# Billionaire Aptitude Test — prototype (no art)
+# Billionaire Aptitude Test — prototype
 
 Static, no build step, works offline (no external requests).
 
@@ -13,24 +13,23 @@ Static, no build step, works offline (no external requests).
 - `js/app.js` — game logic (title → 4 questions → result → VN ending → replay)
 
 ## Flow
-Title (only [한국어] [English], tapping starts in that language) → Q1–Q4 (option order is shuffled each play) →
-- all 4 Elon answers: "Elon match" + [엔딩 보기] → scene-2018 → "당신의 선택은?" (shows all 4 answers) → match → true-ending → [다시 플레이]
-- otherwise: "No match found out of 1 database" → auto-advance (~2.6s) → scene-2018 → situation for the FIRST wrong question → "당신의 선택은?" (shows that answer) → bad-N → [다시 플레이]
+Title → 4-question survey (shuffled options) → one linear story. Each decision: situation line → "당신의 선택" with a single button (the survey answer) →
+wrong answer: its bad ending plays right there; right answer: Elon's reaction, next decision. All right: tent-line → true-sky → [다시 플레이].
+Decision order: 1 trust, 2 work-life, 3 automation, 4 regulations/tent. Bad endings are numbered in that order.
 
-## Art placeholder slots (for Mika)
-Each slot is a full-width box above the dialogue (mobile ratio ≈ 390 × ~480 px visible; draw taller than wide). The slot id is printed in the box's top-left corner and is in `data-slot`. Scene descriptions live in `js/i18n.js` → `placeholders`.
+## Stage layer system (art-plan-v1.md sections 5, 9, 10)
+Stage = the whole `#app` (max 480px wide; on desktop the sides show a darkened, blurred copy of the current background). Art is authored at 1080x2340.
+Layers bottom-up: background (object-fit cover, also behind the dialog), bg-fx, props-back, sprites, props-front, fx, overlay text, dialog.
+- Sprites: 900x1700 transparent webp, bottom-anchored, centred at x 27.8 / 50 / 72.2 % (slots L / C / R), height = 1700/2340 of stage height.
+- Dialog: floating HTML overlay, ~26% of stage height, 3% inset left/right/bottom (+ safe-area), dark 85% with backdrop blur.
+- Animation: idle bob, blink (frame b) and talk (a<->c) when those frames exist, enter/exit fade-slide, expression hop.
+- `js/cues.js` is the manifest: `have` (files that exist), slots, chars, props, and per-line cues keyed `intro.N / sit.I / choice.I / reply.I / bad.I.N / match.N / true.N / end`.
+- Missing art falls back gracefully: a background that is not in `have` (or fails to load) shows the text placeholder box from `i18n.js` → `placeholders`; missing sprites/props/fx are simply not drawn.
+- To add art: drop the webp into `art/bg|chr|prop|fx/` (naming in the plan), add its name to `ART.have` in `js/cues.js`, then add cues.
 
-| slot id | used when | ko description (en in i18n.js) |
-|---|---|---|
-| `scene-2018` | intro + choice screen (all endings) | 2018 프리몬트 공장, 새벽 3시, 라인 옆 책상 밑에서 자는 일론 |
-| `bad-1` | BAD 1 컨설팅 파산 (Q1 wrong) | 텅 빈 공장 로비, 보고서 더미, "자동화 순조" 슬라이드, 팔짱 낀 컨설턴트들 |
-| `bad-2` | BAD 2 회의 무한 루프 (Q2 wrong) | 불 꺼진 공장 위로 "회의 #∞" 회의실 유리창만 환하게 |
-| `bad-3` | BAD 3 로봇 박물관 (Q3 wrong) | 반짝이는 로봇 팔 전시장, 차는 한 대도 없음 |
-| `bad-4` | BAD 4 완공 파산 (Q4 wrong) | 새 공장 개장식, 정문에 붙은 파산 공고 |
-| `match` | Elon-match ending (Elon's real choices → 5,000/week) | 주차장 텐트 조립 라인, 막 나오는 Model 3, 환호하는 직원들 |
-| `true-ending` | true ending chain | 노을 하늘, 로켓·X 로고·전기차가 하나의 스카이라인으로 |
-
-To swap in art later: in `setBg()` of `js/app.js`, render `<img src="img/<slot-id>.png">` instead of the placeholder box.
+## Background / art slot ids (= `art/bg/bg-<id>.webp`)
+`meeting-room` (intro + trust), `factory-night` (work-life), `automation-line`, `parking-dusk` (regulations), `bad-dark-factory` (BAD 1 trust), `bad-lobby` (BAD 2 work-life), `bad-robot-museum` (BAD 3), `bad-opening` (BAD 4), `tent-line`, `true-sky`.
+Wired with art so far: `meeting-room` + sprite `elon-neutral-a` (Elon at x 540 through intro and decision 1).
 
 ## Notes
 - The consulting firm is deliberately unnamed.

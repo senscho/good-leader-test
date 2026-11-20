@@ -1,4 +1,4 @@
-/* All game text. Korean + English. Placeholder slot ids: scene-2018, bad-1..bad-4, match, true-ending */
+/* All game text. Korean + English. Placeholder/art slot ids (= art/bg/bg-<id>.webp): meeting-room, factory-night, automation-line, parking-dusk, bad-lobby, bad-dark-factory, bad-robot-museum, bad-opening, tent-line, true-sky. badTags are indexed by question index but numbered in story order (1 trust, 2 work-life, 3 automation, 4 regulations). */
 window.I18N = {
 ko: {
   title: "Billionaire Aptitude Test",
@@ -24,17 +24,20 @@ ko: {
   ],
   choiceTitle: "당신의 선택",
   replay: "다시 플레이",
-  badTags: ["BAD ENDING 1 · 컨설팅 파산", "BAD ENDING 2 · 회의 무한 루프", "BAD ENDING 3 · 로봇 박물관", "BAD ENDING 4 · 완공 파산"],
+  badTags: ["BAD ENDING 2 · 컨설팅 파산", "BAD ENDING 1 · 회의 무한 루프", "BAD ENDING 3 · 로봇 박물관", "BAD ENDING 4 · 완공 파산"],
   trueTag: "TRUE ENDING",
   matchTag: "ELON MATCH",
   placeholders: {
-    "scene-2018": "[장면: 2018 프리몬트 공장, 새벽 3시, 라인 옆 책상 밑에서 자는 일론]",
-    "bad-1": "[장면: 텅 빈 공장 로비, 두꺼운 보고서 더미와 \"자동화 순조\" 슬라이드, 팔짱 낀 컨설턴트들]",
-    "bad-2": "[장면: 불 꺼진 공장 위로 \"회의 #∞\"라고 적힌 회의실 유리창만 환하게 켜져 있다]",
-    "bad-3": "[장면: 반짝이는 로봇 팔들이 줄지어 선 전시장, 입구에 \"입장료: 로봇 1대\" 팻말, 차는 한 대도 없음]",
-    "bad-4": "[장면: 새 공장 개장식, 리본 앞 연단, 정문에 붙은 파산 공고문 한 장]",
-    "match": "[장면: 주차장에 쳐진 거대한 텐트 조립 라인, 라인 끝에서 막 나오는 Model 3, 환호하는 직원들]",
-    "true-ending": "[장면: 노을 진 하늘, 로켓과 X 로고와 전기차가 한 장의 스카이라인으로 겹쳐 있다]"
+    "meeting-room": "[장면: 새벽의 프리몬트 공장 회의실, 긴 흰 테이블과 빈 의자들, 유리창 너머로 멈춰 선 조립 라인]",
+    "factory-night": "[장면: 2018 프리몬트 공장, 새벽 3시, 멈춘 라인 옆 책상과 침낭 자리, 형광등 몇 개만 켜져 있다]",
+    "automation-line": "[장면: 로봇 팔이 빽빽한 자동화 라인, 컨베이어 중간에서 부품이 걸려 막혀 있고 경고등이 깜빡인다]",
+    "parking-dusk": "[장면: 공장 옆 빈 주차장, 한쪽엔 승인 서류 더미가 쌓인 책상, 반대쪽엔 텐트를 칠 수 있는 탁 트인 맨땅, 해 질 녘]",
+    "bad-lobby": "[장면: 텅 빈 공장 로비, 두꺼운 보고서 더미와 \"자동화 순조\" 슬라이드, 팔짱 낀 컨설턴트들]",
+    "bad-dark-factory": "[장면: 불 꺼진 공장 위로 \"회의 #∞\"라고 적힌 회의실 유리창만 환하게 켜져 있다]",
+    "bad-robot-museum": "[장면: 반짝이는 로봇 팔들이 줄지어 선 전시장, 입구에 \"입장료: 로봇 1대\" 팻말, 차는 한 대도 없음]",
+    "bad-opening": "[장면: 새 공장 개장식, 리본 앞 연단, 정문에 붙은 파산 공고문 한 장]",
+    "tent-line": "[장면: 주차장에 쳐진 거대한 텐트 조립 라인, 라인 끝에서 막 나오는 Model 3, 환호하는 직원들]",
+    "true-sky": "[장면: 노을 진 하늘, 로켓과 X 로고와 전기차가 한 장의 스카이라인으로 겹쳐 있다]"
   },
   intro: [
     ["narrator", "2018년, 프리몬트 공장. Model 3 \"생산 지옥\"의 한복판입니다."],
@@ -125,17 +128,20 @@ en: {
   ],
   choiceTitle: "Your choice",
   replay: "Play again",
-  badTags: ["BAD ENDING 1 · Consulted into Bankruptcy", "BAD ENDING 2 · The Infinite Meeting Loop", "BAD ENDING 3 · The Robot Museum", "BAD ENDING 4 · Built, Then Bankrupt"],
+  badTags: ["BAD ENDING 2 · Consulted into Bankruptcy", "BAD ENDING 1 · The Infinite Meeting Loop", "BAD ENDING 3 · The Robot Museum", "BAD ENDING 4 · Built, Then Bankrupt"],
   trueTag: "TRUE ENDING",
   matchTag: "ELON MATCH",
   placeholders: {
-    "scene-2018": "[Scene: Fremont factory, 2018, 3 AM. Elon asleep under a desk next to the line]",
-    "bad-1": "[Scene: an empty factory lobby, stacks of thick reports and an \"Automation: On Track\" slide, consultants with folded arms]",
-    "bad-2": "[Scene: a dark factory, only the glass meeting room lit up, a sign reading \"Meeting #∞\"]",
-    "bad-3": "[Scene: a showroom of gleaming robot arms in rows, a sign at the door: \"Admission: one (1) robot\", not a single car in sight]",
-    "bad-4": "[Scene: the new factory's grand opening, a podium before the ribbon, one bankruptcy notice taped to the front door]",
-    "match": "[Scene: a giant tent in the parking lot housing an assembly line, a Model 3 rolling off the end, workers cheering]",
-    "true-ending": "[Scene: a sunset sky, a rocket, an X logo and an electric car overlapping into one skyline]"
+    "meeting-room": "[Scene: a Fremont factory meeting room before dawn, a long white table with empty chairs, the stalled assembly line visible through the glass]",
+    "factory-night": "[Scene: Fremont factory, 2018, 3 AM. A desk and sleeping-bag spot beside the stopped line, only a few fluorescent lights on]",
+    "automation-line": "[Scene: a line packed with robot arms, parts jammed mid-conveyor, a warning light blinking]",
+    "parking-dusk": "[Scene: an empty parking lot beside the factory at dusk. On one side, a desk piled with approval paperwork; on the other, open ground where a tent line could go]",
+    "bad-lobby": "[Scene: an empty factory lobby, stacks of thick reports and an \"Automation: On Track\" slide, consultants with folded arms]",
+    "bad-dark-factory": "[Scene: a dark factory, only the glass meeting room lit up, a sign reading \"Meeting #∞\"]",
+    "bad-robot-museum": "[Scene: a showroom of gleaming robot arms in rows, a sign at the door: \"Admission: one (1) robot\", not a single car in sight]",
+    "bad-opening": "[Scene: the new factory's grand opening, a podium before the ribbon, one bankruptcy notice taped to the front door]",
+    "tent-line": "[Scene: a giant tent in the parking lot housing an assembly line, a Model 3 rolling off the end, workers cheering]",
+    "true-sky": "[Scene: a sunset sky, a rocket, an X logo and an electric car overlapping into one skyline]"
   },
   intro: [
     ["narrator", "Fremont factory, 2018. Right in the middle of Model 3 \"production hell.\""],

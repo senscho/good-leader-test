@@ -25,25 +25,51 @@ h1 em{font-style:normal;color:var(--gold);display:block;font-size:16px;letter-sp
 .scan{width:48px;height:48px;border:4px solid var(--line);border-top-color:var(--red);border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .dim{color:var(--dim);font-size:14px}
-/* VN */
-.vn{padding:0}
-.stage{flex:1;min-height:0;padding:max(14px,env(safe-area-inset-top)) 14px 10px;display:flex}
-.ph{flex:1;border:2px dashed #5a6382;border-radius:14px;background:repeating-linear-gradient(135deg,#171b28 0 14px,#1b2030 14px 28px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;text-align:center;position:relative;animation:fade .5s ease}
+/* VN: layered stage. Art is authored at 1080x2340 (9:19.5); the stage is the whole #app. */
+#backdrop{position:fixed;inset:-6%;z-index:-1;background:#0b0d12 center/cover no-repeat;filter:blur(28px) brightness(.35);transform:translateZ(0)}
+.vn{padding:0;overflow:hidden;background:#0b0d12}
+.layer{position:absolute;inset:0;pointer-events:none}
+.bg-layer{overflow:hidden}
+.bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;user-select:none}
+.bg-fx{background:#000;opacity:0;transition:opacity .6s}
+.ph{position:absolute;inset:0;border:2px dashed #5a6382;border-radius:14px;margin:14px 14px 0;background:repeating-linear-gradient(135deg,#171b28 0 14px,#1b2030 14px 28px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 18px 34%;text-align:center;animation:fade .5s ease}
 .ph .slot{position:absolute;top:8px;left:10px;font:11px/1 ui-monospace,monospace;color:#7d87a6;letter-spacing:.5px}
 .ph .desc{font-style:italic;color:#c3c9dc;font-size:16px;line-height:1.5;max-width:90%}
 .ph.bad{border-color:#8a3550}.ph.true{border-color:#8a7a35}.ph.match{border-color:#2f8a6e}
-.dlg{margin:0 12px max(14px,env(safe-area-inset-bottom));background:rgba(21,25,37,.97);border:1px solid var(--line);border-radius:16px;padding:14px 16px 16px;min-height:150px;position:relative;cursor:pointer;user-select:none}
+/* sprites: 900x1700 canvas on a 1080x2340 stage -> height 72.65% of stage, feet at the bottom, centred on x 27.8 / 50 / 72.2 % */
+.chr{position:absolute;bottom:0;height:72.65%;aspect-ratio:900/1700;transform:translateX(-50%);transition:filter .25s}
+.bob{position:absolute;inset:0;animation:bob 2.4s ease-in-out infinite}
+.sprite{position:absolute;inset:0;width:100%;height:100%;user-select:none}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.in-fade{animation:fade .38s ease both}
+.in-slide-l{animation:slidel .38s ease-out both}
+.in-slide-r{animation:slider .38s ease-out both}
+.in-hop{animation:hop .12s ease-out both}
+.out-l{animation:outl .3s ease-in forwards}.out-r{animation:outr .3s ease-in forwards}.out-c{animation:fadeout .3s ease-in forwards}
+@keyframes slidel{from{opacity:0;margin-left:-14%}to{opacity:1;margin-left:0}}
+@keyframes slider{from{opacity:0;margin-left:14%}to{opacity:1;margin-left:0}}
+@keyframes hop{0%{margin-top:0}50%{margin-top:-4px}100%{margin-top:0}}
+@keyframes outl{to{opacity:0;margin-left:-14%}}
+@keyframes outr{to{opacity:0;margin-left:14%}}
+@keyframes fadeout{to{opacity:0}}
+.prop{position:absolute;transform:translate(-50%,-50%);height:auto}
+.in-pop{animation:pop .32s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes pop{from{transform:translate(-50%,-50%) scale(0);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.ovl{position:absolute;left:50%;top:14%;transform:translateX(-50%);color:#fff;font-weight:800;text-shadow:0 2px 8px #000}
+.shake{animation:shake .24s linear 1}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+/* dialog: floating overlay, ~26% of stage height, 3% inset left/right/bottom */
+.dlg{position:absolute;left:3%;right:3%;bottom:calc(3% + env(safe-area-inset-bottom));min-height:26%;background:rgba(14,17,26,.85);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:16px;padding:14px 16px 16px;cursor:pointer;user-select:none;z-index:10}
 .name{display:inline-block;background:var(--gold);color:#1a1405;font-weight:800;font-size:13px;padding:3px 10px;border-radius:8px;margin-bottom:8px}
 .name.narrator{background:#3a4156;color:#dfe4f3}
 .name.elon{background:var(--green)}
-.txt{font-size:18px;line-height:1.55;min-height:84px;white-space:pre-wrap}
+.txt{font-size:18px;line-height:1.55;min-height:72px;white-space:pre-wrap}
 .next{position:absolute;right:14px;bottom:8px;color:var(--gold);animation:blink 1s infinite}
 @keyframes blink{50%{opacity:.2}}
 .choice-title{font-size:22px;font-weight:800;color:var(--gold);margin-bottom:10px}
-.chip{background:#222840;border:1px solid var(--gold);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:16px;line-height:1.4}
-.chip small{display:block;color:var(--dim);font-size:12px;margin-bottom:2px}
+.choice-btn{margin-top:4px;border-color:var(--gold)}
 .end-box{display:flex;flex-direction:column;gap:10px;align-items:stretch}
 .tag{font-size:13px;letter-spacing:2px;color:var(--red);font-weight:800}
 .tag.ok{color:var(--green)}
-.choice-btn{margin-top:4px;border-color:var(--gold)}
-.dlg.choosing{cursor:default}
+@media (max-height:700px){.txt{font-size:16px;min-height:60px}.name{margin-bottom:6px}.dlg{padding:10px 14px 14px}.choice-title{font-size:19px;margin-bottom:6px}}
+@media (prefers-reduced-motion:reduce){.bob{animation:none}.in-slide-l,.in-slide-r,.in-hop,.in-pop{animation:fade .2s ease both}}
