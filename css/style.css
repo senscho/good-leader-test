@@ -88,3 +88,5 @@ h1 em{font-style:normal;color:var(--gold);display:block;font-size:16px;letter-sp
 @keyframes popx{from{transform:translate(-50%,-50%) scale(0);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
 .ovl.in-pop{animation:ovlpop .32s cubic-bezier(.34,1.56,.64,1) both}
 @keyframes ovlpop{from{transform:translateX(-50%) scale(0);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
+.fshadow{position:absolute;left:50%;bottom:-1.2%;width:62%;height:4.2%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,0,0,.55) 0,rgba(0,0,0,.28) 45%,rgba(0,0,0,0) 72%);filter:blur(3px);pointer-events:none}
+.chr.land .fshadow{width:46%;height:6%;bottom:-2%}

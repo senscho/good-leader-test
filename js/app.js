@@ -197,7 +197,7 @@
         im.onerror = function () { delete c.imgs[f]; if (im.parentNode) im.parentNode.removeChild(im); c.frames = c.frames.filter(function (x) { return x !== f; }); if (!c.frames.length) removeChar(slot, true); };
         c.imgs[f] = im; bob.appendChild(im);
       });
-      scl.appendChild(bob); wrap.appendChild(scl);
+      scl.appendChild(el("div", "fshadow")); scl.appendChild(bob); wrap.appendChild(scl);   // soft floor shadow under every sprite
       c.scl = scl;
       wrap.style.animationDelay = "0s"; bob.style.animationDelay = (-Math.random() * 2.4).toFixed(2) + "s";
       var big = swap && BIG_HOP.indexOf(spec.expr) >= 0;
@@ -245,10 +245,12 @@
     }
     function spotlight(who, dimAll) {   // speaker: scale 1, front, bright. Other sprites while someone speaks: scale .88, dimmed, behind. Narrator: neutral. Choice: all dimmed.
       var isChar = CHAR_IDS.indexOf(who) >= 0;
+      var warm = (A.warmBg || []).indexOf(curBg) >= 0 ? (A.warmFilter || "") : "";     // sunset scenes tint the sprites, composed with the dimming below
       Object.keys(sprites).forEach(function (k) {
         var c = sprites[k]; if (!c) return;
         var me = !dimAll && isChar && c.id === who, other = !dimAll && isChar && !me;
-        c.wrap.style.filter = dimAll ? "brightness(.6)" : (other ? "brightness(.75)" : "");
+        var dim = dimAll ? "brightness(.6)" : (other ? "brightness(.75)" : "");
+        c.wrap.style.filter = (warm + " " + dim).trim();
         c.scl.style.transform = other ? "scale(.88)" : "scale(1)";
         c.wrap.style.zIndex = me ? 3 : (k === "C" ? 2 : 1);
       });

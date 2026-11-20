@@ -4,7 +4,7 @@
    (backgrounds) or is simply not drawn (sprites/props/fx). When Mika delivers a new file: add its name to `have`. */
 window.ART = {
   have: {
-    bg:  ["meeting-room"],                 // art/bg/bg-<id>.webp
+    bg:  ["meeting-room", "factory-night", "automation-line", "parking-dusk", "tent-line"],   // art/bg/bg-<id>.webp
     chr: [   // art/chr/<char>-<expr>-<frame>.webp  (a = base, b = blink, c = talk)
       "board-annoyed-a", "board-annoyed-b", "board-annoyed-c", "board-baffled-a",
       "board-baffled-b", "board-baffled-c", "board-stern-a", "board-stern-b",
@@ -23,6 +23,8 @@ window.ART = {
     prop: [],                              // art/prop/prop-<name>[-<n>].webp
     fx: []                                 // art/fx/fx-<name>.webp
   },
+  warmBg: ["parking-dusk", "tent-line"],                           // sunset scenes: sprites get this filter (composed with speaker dimming)
+  warmFilter: "sepia(.15) saturate(1.1) brightness(1.05)",
   stage: { w: 1080, h: 2340, spriteW: 900, spriteH: 1700 },
   slots: ["L", "C", "R"],                                       // logical order, kept whatever the count
   layouts: { 1: [540], 2: [360, 720], 3: [250, 540, 830] },       // sprite centre x (of 1080) by number of sprites on stage; edges may crop up to 90px
