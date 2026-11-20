@@ -1,8 +1,8 @@
 /* All game text. Korean + English. Placeholder/art slot ids (= art/bg/bg-<id>.webp): meeting-room, factory-night, automation-line, parking-dusk, bad-lobby, bad-dark-factory, bad-robot-museum, bad-opening, tent-line, true-sky. badTags are indexed by question index but numbered in story order (1 trust, 2 work-life, 3 automation, 4 regulations). */
 window.I18N = {
 ko: {
-  title: "Billionaire Aptitude Test",
-  titleKicker: "빌리어네어 적성 검사",
+  title: "좋은 리더 테스트",
+  titleKicker: "The Good Leader Test",
   langName: "한국어",
   qLabel: "문항",
   tapHint: "▼",
@@ -106,8 +106,8 @@ ko: {
 },
 
 en: {
-  title: "Billionaire Aptitude Test",
-  titleKicker: "Billionaire Aptitude Test",
+  title: "The Good Leader Test",
+  titleKicker: "좋은 리더 테스트",
   langName: "English",
   qLabel: "Question",
   tapHint: "▼",

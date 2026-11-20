@@ -19,7 +19,7 @@
     clear(); answers = []; L = null; setBackdropNone();
     document.documentElement.lang = "ko";
     var s = el("section", "screen center");
-    s.innerHTML = '<h1>Billionaire<br>Aptitude Test</h1>';
+    s.innerHTML = '<h1>좋은 리더 테스트</h1><div class="sub-title">The Good Leader Test</div><div class="dim">나는 어떤 리더일까? · 4 questions, about a minute</div>';
     var st = el("div", "stack");
     [["ko", "한국어"], ["en", "English"]].forEach(function (p) {
       var b = el("button", "btn lang", p[1]);
@@ -35,13 +35,13 @@
     lang = l; L = I18N[l]; answers = [];
     order = L.questions.map(function () { return Math.random() < 0.5 ? [0, 1] : [1, 0]; });
     document.documentElement.lang = l;
-    preload(["art/bg/bg-meeting-room.webp", "art/chr/elon-neutral-a.webp"]);   // first scene, fetched while the survey runs
     question(0);
   }
 
   /* ---------- questions ---------- */
   function question(pos) {
     var i = SEQ[pos], q = L.questions[i];
+    if (pos === 3) preload(["art/bg/bg-meeting-room.webp", "art/chr/elon-neutral-a.webp"]);   // first story scene, fetched during the last survey question only
     var s = el("section", "screen");
     var p = el("div", "progress");
     for (var k = 0; k < 4; k++) p.appendChild(el("i", k <= pos ? "on" : ""));
@@ -158,9 +158,15 @@
       return def.frames;
     }
     function frameSrc(id, expr, f) { return "art/chr/" + id + "-" + expr + "-" + f + ".webp"; }
+    /* positions depend on how many sprites are on stage (logical order L, C, R is kept): 1 -> 540, 2 -> 360/720, 3 -> 250/540/830 of 1080 */
+    function layout() {
+      var live = ["L", "C", "R"].filter(function (k) { return sprites[k]; });
+      var xs = A.layouts[live.length] || [];
+      live.forEach(function (k, i) { sprites[k].wrap.style.left = pct(xs[i] / A.stage.w * 100); });
+    }
     function removeChar(slot, instant) {
       var c = sprites[slot]; if (!c) return;
-      c.alive = false; sprites[slot] = null;
+      c.alive = false; sprites[slot] = null; layout();
       if (instant) { c.wrap.parentNode && c.wrap.parentNode.removeChild(c.wrap); return; }
       c.wrap.classList.add("out-" + (slot === "L" ? "l" : slot === "R" ? "r" : "c"));
       setTimeout(function () { c.wrap.parentNode && c.wrap.parentNode.removeChild(c.wrap); }, 320);
@@ -178,8 +184,7 @@
       if (!frames.length) { removeChar(slot); return; }               // no art yet: nothing drawn (text placeholder only)
       var swap = !!(cur && cur.id === spec.id);
       if (cur) removeChar(slot, swap);
-      var wrap = el("div", "chr " + slot), bob = el("div", "bob");
-      wrap.style.left = pct(A.slots[slot].x);
+      var wrap = el("div", "chr " + slot), scl = el("div", "scl"), bob = el("div", "bob");
       var c = { id: spec.id, expr: spec.expr, wrap: wrap, imgs: {}, frames: frames, alive: true, cur: frames[0], special: !!(A.chars[spec.id].special && A.chars[spec.id].special[spec.expr]) };
       var loaded = 0;
       frames.forEach(function (f) {
@@ -188,12 +193,13 @@
         im.src = frameSrc(spec.id, spec.expr, f);
         c.imgs[f] = im; bob.appendChild(im);
       });
-      wrap.appendChild(bob);
+      scl.appendChild(bob); wrap.appendChild(scl);
+      c.scl = scl;
       wrap.style.animationDelay = "0s"; bob.style.animationDelay = (-Math.random() * 2.4).toFixed(2) + "s";
       var anim = swap ? "hop" : (spec.anim || (slot === "L" ? "slide-l" : slot === "R" ? "slide-r" : "fade"));
       wrap.classList.add("in-" + anim);
       chL.appendChild(wrap);
-      sprites[slot] = c; showFrame(c, c.frames[0]);
+      sprites[slot] = c; layout(); showFrame(c, c.frames[0]);
       if (c.special) breathe(c); else blink(c);
     }
     function blink(c) {   // b frame for 110 ms every 2.5-5 s
@@ -223,12 +229,14 @@
         } else if (c.alive && c.cur === "c") showFrame(c, "a");
       });
     }
-    function spotlight(who, dimAll) {   // speaker highlight; choice screens dim everyone
+    function spotlight(who, dimAll) {   // speaker: scale 1, front, bright. Other sprites while someone speaks: scale .88, dimmed, behind. Narrator: neutral. Choice: all dimmed.
+      var isChar = CHAR_IDS.indexOf(who) >= 0;
       Object.keys(sprites).forEach(function (k) {
         var c = sprites[k]; if (!c) return;
-        var isChar = CHAR_IDS.indexOf(who) >= 0;
-        c.wrap.style.filter = dimAll ? "brightness(.6)" : (isChar && c.id !== who ? "brightness(.8)" : "");
-        c.wrap.style.zIndex = (!dimAll && isChar && c.id === who) ? 3 : (k === "C" ? 2 : 1);   // speaker in front when sprites overlap
+        var me = !dimAll && isChar && c.id === who, other = !dimAll && isChar && !me;
+        c.wrap.style.filter = dimAll ? "brightness(.6)" : (other ? "brightness(.75)" : "");
+        c.scl.style.transform = other ? "scale(.88)" : "scale(1)";
+        c.wrap.style.zIndex = me ? 3 : (k === "C" ? 2 : 1);
       });
     }
 

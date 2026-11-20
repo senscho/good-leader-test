@@ -1,4 +1,6 @@
-# Billionaire Aptitude Test — prototype
+# 좋은 리더 테스트 / The Good Leader Test — prototype
+
+(Repo and URL keep the original name, billionaire-aptitude-test. The public title is deliberately a plain personality-test bait: no Elon/Tesla/billionaire hints on the title screen or in the survey; the reveal starts with the story intro after the survey. No art on title or survey.)
 
 Static, no build step, works offline (no external requests).
 

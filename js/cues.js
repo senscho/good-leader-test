@@ -10,7 +10,8 @@ window.ART = {
     fx: []                                 // art/fx/fx-<name>.webp
   },
   stage: { w: 1080, h: 2340, spriteW: 900, spriteH: 1700 },
-  slots: { L: { x: 300 / 1080 * 100 }, C: { x: 50 }, R: { x: 780 / 1080 * 100 } },   // % of stage width (27.8 / 50 / 72.2)
+  slots: ["L", "C", "R"],                                       // logical order, kept whatever the count
+  layouts: { 1: [540], 2: [360, 720], 3: [250, 540, 830] },       // sprite centre x (of 1080) by number of sprites on stage; edges may crop up to 90px
   chars: {   // exprs and frame letters: a = base, b = blink (eyes closed), c = talk (mouth open); special poses use numeric frames
     elon:       { exprs: ["neutral", "firm", "regret", "surprised", "smile"], frames: ["a", "b", "c"], special: { sleep: ["1", "2"] } },
     engineer:   { exprs: ["neutral", "worried", "puzzled", "shocked", "cheer"], frames: ["a", "b", "c"] },
@@ -23,7 +24,7 @@ window.ART = {
      cue fields: chars {L|C|R: {id, expr, anim} | null}, add/remove [{id, anim, delay, x, y, w, flip}], stage ["shake","dim-chars"],
      bgfx {dark, grayscale}, overlay [{id, text, anim}], counter {id, from, to, ms}.  A background change clears props/fx/overlay and sprites. */
   cues: {
-    /* Layout: Elon C (x 540), engineer L (x 300), board / consultant R (x 780). The speaker is drawn in front and bright, the others dim.
+    /* Logical slots: Elon C, engineer L, board / consultant R; the real x comes from `layouts` by sprite count. The speaker is drawn in front at full size and bright; the others are scaled .88, dimmed and behind.
        A background change clears every sprite, so each scene re-adds who is in it. Only the "neutral/stern/smug" a-frames exist so far. */
     /* trust / meeting-room: Elon at C from the first line; engineer joins on his first line, board on hers and leaves before decision 1 */
     "intro.0": { chars: { C: { id: "elon", expr: "neutral", anim: "fade" } } },
