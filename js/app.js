@@ -382,19 +382,21 @@
       var len = Math.sqrt(dx * dx + dy * dy), up = Math.atan2(dy, dx) * 180 / Math.PI, ms = o.ms || 1600;
       if (have("fx", "smoke-trail")) {
         var tr = new Image(); tr.alt = ""; tr.className = "fxi"; tr.setAttribute("data-fx", "smoke");
-        tr.style.left = pct((o.from.x + o.to.x) / 2); tr.style.top = pct((o.from.y + o.to.y) / 2); tr.style.width = Math.round(len) + "px";
-        tr.style.rotate = (-up) + "deg"; tr.src = KIND_FILE.fx("smoke-trail"); fxL.appendChild(tr);
-        wapi(tr, [{ clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0 0 0)" }], { duration: ms, easing: "ease-out", fill: "both" });
+        var rh = (A.props.rocket.w / 100 * S.w) * 932 / 468 / 2, k = Math.max(0, (len - rh * .8) / len);   // end the trail at the nozzle, not the rocket centre
+        var ex = o.from.x + (o.to.x - o.from.x) * k, ey = o.from.y + (o.to.y - o.from.y) * k;
+        tr.style.left = pct((o.from.x + ex) / 2); tr.style.top = pct((o.from.y + ey) / 2); tr.style.width = Math.round(len * k) + "px";
+        tr.style.rotate = (-up) + "deg"; tr.style.scale = "-1 1"; tr.src = KIND_FILE.fx("smoke-trail"); fxL.appendChild(tr);   // flipped: thick billow at the pad, thin at the nozzle
+        wapi(tr, [{ clipPath: "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0)" }], { duration: ms, easing: "ease-out", fill: "both" });
         timers.push(setTimeout(function () { wapi(tr, [{ opacity: 1 }, { opacity: 0 }], { duration: 1400, fill: "forwards" }); timers.push(setTimeout(function () { tr.parentNode && tr.parentNode.removeChild(tr); }, 1500)); }, ms + 500));
       }
       var r = addProp({ id: "rocket", anim: "none", x: o.to.x, y: o.to.y, rot: 90 - up, layer: "front" });
-      if (r) { r.classList.add("in-none"); wapi(r, [{ transform: "translate(" + (-dx) + "px," + dy + "px)" }, { transform: "none" }], { duration: ms, easing: "ease-out", fill: "backwards" }); }
+      if (r) { r.classList.add("in-none"); wapi(r, [{ translate: "calc(-50% + " + (-dx) + "px) calc(-50% + " + dy + "px)" }, { translate: "-50% -50%" }], { duration: ms, easing: "ease-out", fill: "backwards" }); }
     }
     function lines(o) {   // gold lines drawn one after another from a point to each target (SVG)
       var S = stageSize(), ns = "http://www.w3.org/2000/svg", svg = document.createElementNS(ns, "svg");
       svg.setAttribute("viewBox", "0 0 " + S.w + " " + S.h); svg.setAttribute("class", "goldlines"); svg.setAttribute("data-fx", "goldlines");
       svg.style.cssText = "position:absolute;inset:0;width:100%;height:100%;pointer-events:none";
-      fxL.appendChild(svg);
+      pBack.appendChild(svg);
       o.to.forEach(function (t, i) {
         var ln2 = document.createElementNS(ns, "line"), x1 = o.from.x / 100 * S.w, y1 = o.from.y / 100 * S.h, x2 = t.x / 100 * S.w, y2 = t.y / 100 * S.h, L2 = Math.hypot(x2 - x1, y2 - y1);
         ln2.setAttribute("x1", x1); ln2.setAttribute("y1", y1); ln2.setAttribute("x2", x2); ln2.setAttribute("y2", y2);
@@ -429,6 +431,13 @@
         } else if (o.id === "sparkle") fxImg("sparkle", o, "in-spark", 1000);
         else if (o.id === "sweat") {   // beside a sprite's head
           var sx = o.at ? slotX(o.at) + (o.dx != null ? o.dx : 8) : o.x; fxImg("sweat", { x: sx, y: o.y != null ? o.y : 36, w: o.w || 6 }, "in-pop", o.ms || 1800);
+        } else if (o.id === "light-rays") {
+          var ry = el("div", "rays" + (o.down ? " down" : "")); ry.setAttribute("data-fx", "light-rays");
+          ry.style.left = pct(o.x != null ? o.x : 50); ry.style.top = pct(o.y != null ? o.y : 40);
+          if (o.w) { if (o.down) ry.style.setProperty("--w", pct(o.w)); else ry.style.width = pct(o.w); }
+          if (o.op != null) ry.style.setProperty("--op", o.op);
+          (o.layer === "back" ? pBack : fxL).appendChild(ry);
+          if (o.ms) timers.push(setTimeout(function () { ry.parentNode && ry.parentNode.removeChild(ry); }, o.ms));
         } else if (o.id === "ring") { var rg = el("div", "ring"); rg.style.left = pct(o.x); rg.style.top = pct(o.y); fxL.appendChild(rg); timers.push(setTimeout(function () { rg.parentNode && rg.parentNode.removeChild(rg); }, 900)); }
         else if (o.id === "alarm") { var al = el("div", "alarm"); al.setAttribute("data-fx", "alarm"); al.style.left = pct(o.x); al.style.top = pct(o.y); fxL.appendChild(al); }
         else if (o.id === "confetti") confetti(o);
@@ -459,6 +468,7 @@
     var beatWait = null;
     function runBeat(beat, st) {
       busy = true; dlg.style.display = "none";
+      (beat.remove || []).forEach(removeThing);
       setBg(beat.bg, st.kind, null);
       GameAudio.cue(st.key + ".beat");
       ["L", "C", "R"].forEach(function (k) { setChar(k, beat.chars && beat.chars[k] || null); });

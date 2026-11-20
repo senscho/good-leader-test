@@ -58,7 +58,7 @@ h1 em{font-style:normal;color:var(--gold);display:block;font-size:16px;letter-sp
 @keyframes fadeout{to{opacity:0}}
 .prop{position:absolute;translate:-50% -50%;height:auto;user-select:none;pointer-events:none}
 .ovl{position:absolute;left:50%;top:14%;transform:translateX(-50%);color:#fff;font-weight:800;text-shadow:0 2px 8px #000}
-.shake{animation:shake .25s linear 1}
+.vn.shake>.layer{animation:shake .25s linear 1}
 @keyframes shake{20%{transform:translateY(-6px)}45%{transform:translateY(6px)}70%{transform:translateY(-3px)}}
 /* dialog: floating overlay, ~26% of stage height, 3% inset left/right/bottom */
 .dlg{position:absolute;left:3%;right:3%;bottom:calc(3% + env(safe-area-inset-bottom));min-height:26%;background:rgba(14,17,26,.85);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:16px;padding:14px 16px 16px;cursor:pointer;user-select:none;z-index:10}
@@ -164,6 +164,19 @@ h1 em{font-style:normal;color:var(--gold);display:block;font-size:16px;letter-sp
 .qicon{display:block;width:96px;height:96px;margin:0 auto 12px;animation:popp .34s cubic-bezier(.34,1.56,.64,1) both}
 .qicon.out{animation:exitup .22s ease-in forwards}
 .spark2{position:absolute;width:44px;height:auto;z-index:1}
+
+/* QA fix H1: explicit layer order so sprites (z 1-3 inside .chars) never paint over front props / fx / chips */
+.vn>.bg-layer{z-index:0}.vn>.bg-fx{z-index:1}.vn>.props-back{z-index:2}.vn>.chars{z-index:3}.vn>.props-front{z-index:4}.vn>.fx{z-index:5}.vn>.overlay-text{z-index:6}
+/* QA: fx-light-rays without an image */
+.rays{position:absolute;translate:-50% -50%;width:160%;aspect-ratio:1;pointer-events:none;mix-blend-mode:screen;
+  background:repeating-conic-gradient(from 0deg,rgba(255,236,170,.55) 0deg 5deg,rgba(255,236,170,0) 5deg 15deg);
+  -webkit-mask:radial-gradient(circle,#000 0,rgba(0,0,0,.55) 22%,transparent 60%);mask:radial-gradient(circle,#000 0,rgba(0,0,0,.55) 22%,transparent 60%);
+  opacity:var(--op,.7);animation:raysin .8s ease-out both,raysspin 60s linear infinite}
+.rays.down{translate:-50% 0;width:var(--w,120%);height:75%;aspect-ratio:auto;animation:raysin .8s ease-out both;
+  background:conic-gradient(from 150deg at 50% 0,transparent 0deg,rgba(255,245,215,.5) 8deg,transparent 16deg,rgba(255,245,215,.35) 26deg,transparent 34deg,rgba(255,245,215,.5) 44deg,transparent 52deg,transparent 360deg);
+  -webkit-mask:linear-gradient(#000 0,rgba(0,0,0,.6) 55%,transparent 100%);mask:linear-gradient(#000 0,rgba(0,0,0,.6) 55%,transparent 100%)}
+@keyframes raysin{from{opacity:0}to{opacity:var(--op,.7)}}
+@keyframes raysspin{to{rotate:360deg}}
 
 /* mute button: always visible, top right of the 480px stage (44x44) */
 .mute-btn{position:fixed;top:max(8px,env(safe-area-inset-top));right:max(8px,calc((100vw - 480px)/2 + 8px));width:44px;height:44px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(14,17,26,.6);color:#fff;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:60;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);-webkit-tap-highlight-color:transparent}
