@@ -43,10 +43,10 @@ ko: {
     ["narrator", "모두의 시선이 당신에게 모였습니다. 당신은 지금 일론의 자리에 앉아 있습니다."]
   ],
   situations: [
-    ["engineer", "새벽 3시예요. 집에 들어가서 아이 얼굴을 보실 수도 있고, 라인 옆에 남으실 수도 있어요."],
-    ["engineer", "각 팀장들이 \"다 잘되고 있다\"고 보고했어요. 믿고 맡기실 건가요?"],
-    ["engineer", "저 자동화 라인, 우리가 제일 오래 공들인 겁니다. 그런데 병목이 바로 저기예요."],
-    ["engineer", "새 라인을 만들려면 정식 승인과 공사 절차가 있습니다. 규정대로 가시겠어요?"]
+    ["engineer", "직접 가보기로 하셨군요. 그런데 지금 새벽 3시예요. 집에 들어가 아이 얼굴을 보실 수도 있고, 라인 옆에 남으실 수도 있어요."],
+    ["engineer", "각 팀장들이 \"다 잘되고 있다\"고 보고했어요. 그런데 라인에서는 차가 안 나옵니다. 그래도 보고를 믿고 맡기실 건가요?"],
+    ["engineer", "라인 옆에서 며칠을 보내고 나서야 알았습니다. 병목은 바로 저 자동화 라인이에요. 우리가 제일 오래 공들인 건데, 끝까지 가져가시겠어요?"],
+    ["engineer", "자동화를 걷어내도 새 라인이 필요합니다. 정식 승인과 공사 절차를 밟으면 1년이 걸려요. 규정대로 가시겠어요?"]
   ],
   bad: [
     [ ["narrator", "당신은 현장 대신, 유명한 컨설팅 업체에 생산을 맡겼습니다. 퇴근길 발걸음이 가볍습니다."],
@@ -79,9 +79,6 @@ ko: {
       ["narrator", "마침내 새 공장이 완공됐습니다. 오늘은 성대한 개장식 날입니다."],
       ["engineer", "대표님, 정문에 종이 한 장이 붙어 있는데요…"],
       ["narrator", "리본을 자르기 직전, 문에 붙은 것은 파산 공고였습니다."] ]
-  ],
-  matchOpen: [
-    ["narrator", "당신의 네 가지 선택은 일론의 선택과 같았습니다. 당신도 이 테스트의 함정을 피했습니다."]
   ],
   replies: [
     ["elon", "집엔 안 갑니다. 여기서 먹고 여기서 잡니다. 라인이 사는 날까지요."],
@@ -147,10 +144,10 @@ en: {
     ["narrator", "Every eye in the room turns to you. You are sitting in Elon's chair."]
   ],
   situations: [
-    ["engineer", "It's 3 AM. You could go home and see your kids, or you could stay by the line."],
-    ["engineer", "The team leads all report that everything is going great. Do you trust them and step back?"],
-    ["engineer", "That automation line is the thing we've sunk the most time into. It's also the bottleneck."],
-    ["engineer", "A new line needs formal approval and the proper construction process. Do we go by the book?"]
+    ["engineer", "So you're going to see it yourself. But it's 3 AM. You could go home and see your kids, or you could stay by the line."],
+    ["engineer", "The team leads all report that everything is going great. Yet the line isn't producing cars. Do you still trust the reports and step back?"],
+    ["engineer", "After days beside the line, it's clear. The bottleneck is that automation line, the thing we've sunk the most time into. Do you stick with it to the end?"],
+    ["engineer", "Even without the automation, we need a new line. Formal approval and the proper construction process would take a year. Do we go by the book?"]
   ],
   bad: [
     [ ["narrator", "Instead of the factory floor, you hand production to a famous consulting firm. Your walk home is very light."],
@@ -183,9 +180,6 @@ en: {
       ["narrator", "At last the new factory is finished. Today is its grand opening."],
       ["engineer", "Boss, there's a piece of paper taped to the front door…"],
       ["narrator", "Just before the ribbon was cut, the notice on the door turned out to be a bankruptcy filing."] ]
-  ],
-  matchOpen: [
-    ["narrator", "All four of your choices matched Elon's. You avoided every trap in this test."]
   ],
   replies: [
     ["elon", "I'm not going home. I eat here, I sleep here, until the line lives."],

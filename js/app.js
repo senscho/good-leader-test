@@ -5,8 +5,8 @@
   var answers = [];       // {idx, elon, label}
   var order = [];         // per-question option order
   var timers = [];
-  /* story/survey order, as indexes into the i18n arrays: trust -> work-life -> tent -> automation */
-  var SEQ = [1, 0, 3, 2];
+  /* story/survey order, as indexes into the i18n arrays: trust -> work-life -> automation -> tent (new line) */
+  var SEQ = [1, 0, 2, 3];
 
   function clear() { timers.forEach(clearTimeout); timers = []; }
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
@@ -83,7 +83,7 @@
       }
     });
     if (!ended) {
-      L.matchOpen.concat(L.matchLines).forEach(function (ln) { steps.push({ type: "line", bg: "match", kind: "match", who: ln[0], text: ln[1], tag: L.matchTag }); });
+      L.matchLines.forEach(function (ln) { steps.push({ type: "line", bg: "match", kind: "match", who: ln[0], text: ln[1], tag: L.matchTag }); });
       L.trueLines.forEach(function (ln) { steps.push({ type: "line", bg: "true-ending", kind: "true", who: ln[0], text: ln[1], tag: L.trueTag }); });
     }
     steps.push({ type: "end", bg: steps[steps.length - 1].bg, kind: steps[steps.length - 1].kind });
