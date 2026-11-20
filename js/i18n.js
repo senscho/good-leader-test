@@ -9,9 +9,9 @@ ko: {
   speakers: { narrator: "내레이션", elon: "일론", engineer: "엔지니어", consultant: "컨설턴트", board: "이사회 임원" },
   /* opts[0] = trap answer (leads to the bad ending), opts[1] = Elon's answer */
   questions: [
-    { q: "여러분은 2시에 회사에서 나와서 아이를 보는 삶을 원하시나요? 아니면 일이 우선인가요?",
-      opts: ["2시에 퇴근해서 아이를 보는 삶", "일이 우선"],
-      short: ["퇴근해서 아이를 본다", "일이 우선이다"] },
+    { q: "워라밸이 중요한가요, 일이 우선인가요?",
+      opts: ["워라밸이 중요합니다", "일이 우선입니다"],
+      short: ["워라밸이 중요하다", "일이 우선이다"] },
     { q: "여러분은 매니저입니다. 직속 부하 직원에게 무한 신뢰를 줄 수 있나요?",
       opts: ["네, 무한 신뢰를 줍니다", "아니요, 직접 확인합니다"],
       short: ["부하를 무한 신뢰한다", "직접 확인한다"] },
@@ -110,9 +110,9 @@ en: {
   tapHint: "▼",
   speakers: { narrator: "Narrator", elon: "Elon", engineer: "Engineer", consultant: "Consultant", board: "Board member" },
   questions: [
-    { q: "Would you rather leave work at 2 PM to be with your kids, or does work come first?",
-      opts: ["Leave at 2 PM for my kids", "Work comes first"],
-      short: ["Leave to be with the kids", "Work comes first"] },
+    { q: "Is work-life balance important, or does work come first?",
+      opts: ["Work-life balance is important", "Work comes first"],
+      short: ["Work-life balance matters", "Work comes first"] },
     { q: "You're a manager. Can you give your direct reports unlimited trust?",
       opts: ["Yes, unlimited trust", "No, I verify myself"],
       short: ["Trust them unconditionally", "Verify it myself"] },
