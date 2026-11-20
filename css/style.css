@@ -47,9 +47,11 @@ h1 em{font-style:normal;color:var(--gold);display:block;font-size:16px;letter-sp
 .in-slide-l{animation:slidel .38s ease-out both}
 .in-slide-r{animation:slider .38s ease-out both}
 .in-hop{animation:hop .12s ease-out both}
+.in-hop-big{animation:hopbig .16s ease-out both}
 .out-l{animation:outl .3s ease-in forwards}.out-r{animation:outr .3s ease-in forwards}.out-c{animation:fadeout .3s ease-in forwards}
 @keyframes slidel{from{opacity:0;margin-left:-14%}to{opacity:1;margin-left:0}}
 @keyframes slider{from{opacity:0;margin-left:14%}to{opacity:1;margin-left:0}}
+@keyframes hopbig{0%{margin-top:0}50%{margin-top:-10px}100%{margin-top:0}}
 @keyframes hop{0%{margin-top:0}50%{margin-top:-4px}100%{margin-top:0}}
 @keyframes outl{to{opacity:0;margin-left:-14%}}
 @keyframes outr{to{opacity:0;margin-left:14%}}
@@ -58,8 +60,8 @@ h1 em{font-style:normal;color:var(--gold);display:block;font-size:16px;letter-sp
 .in-pop{animation:pop .32s cubic-bezier(.34,1.56,.64,1) both}
 @keyframes pop{from{transform:translate(-50%,-50%) scale(0);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
 .ovl{position:absolute;left:50%;top:14%;transform:translateX(-50%);color:#fff;font-weight:800;text-shadow:0 2px 8px #000}
-.shake{animation:shake .24s linear 1}
-@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.shake{animation:shake .25s linear 1}
+@keyframes shake{20%{transform:translateY(-6px)}45%{transform:translateY(6px)}70%{transform:translateY(-3px)}}
 /* dialog: floating overlay, ~26% of stage height, 3% inset left/right/bottom */
 .dlg{position:absolute;left:3%;right:3%;bottom:calc(3% + env(safe-area-inset-bottom));min-height:26%;background:rgba(14,17,26,.85);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:16px;padding:14px 16px 16px;cursor:pointer;user-select:none;z-index:10}
 .name{display:inline-block;background:var(--gold);color:#1a1405;font-weight:800;font-size:13px;padding:3px 10px;border-radius:8px;margin-bottom:8px}
@@ -75,3 +77,14 @@ h1 em{font-style:normal;color:var(--gold);display:block;font-size:16px;letter-sp
 .tag.ok{color:var(--green)}
 @media (max-height:700px){.txt{font-size:16px;min-height:60px}.name{margin-bottom:6px}.dlg{padding:10px 14px 14px}.choice-title{font-size:19px;margin-bottom:6px}}
 @media (prefers-reduced-motion:reduce){.bob{animation:none}.in-slide-l,.in-slide-r,.in-hop,.in-pop{animation:fade .2s ease both}}
+.chr.land{height:auto}
+.dust{position:absolute;width:22%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(214,205,190,.75) 0,rgba(214,205,190,.35) 45%,rgba(214,205,190,0) 70%);filter:blur(2px);pointer-events:none}
+.in-puff{animation:puff .7s ease-out both}
+@keyframes puff{from{transform:translate(-50%,-50%) scale(.2);opacity:.9}to{transform:translate(-50%,-50%) scale(1.5);opacity:0}}
+.dust.flip{animation-delay:.04s}
+.ovl{font-size:44px;letter-spacing:2px;color:#ffe9a8;text-shadow:0 3px 0 #5a3b00,0 0 14px #000}
+.xglyph{position:absolute;left:50%;top:34%;width:30%;aspect-ratio:1;transform:translate(-50%,-50%);filter:drop-shadow(0 0 14px #e9c46a) drop-shadow(0 0 4px #e9c46a)}
+.xglyph.in-pop{animation:popx .5s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes popx{from{transform:translate(-50%,-50%) scale(0);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.ovl.in-pop{animation:ovlpop .32s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes ovlpop{from{transform:translateX(-50%) scale(0);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}

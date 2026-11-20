@@ -157,6 +157,8 @@
       if (def.special && def.special[expr]) return def.special[expr];
       return def.frames;
     }
+    function isSpecial(id, expr) { var d = A.chars[id]; return !!(d && d.special && d.special[expr]); }
+    function isBreathing(id, expr) { var d = A.chars[id]; return !!(d && d.breathing && d.breathing.indexOf(expr) >= 0); }
     function frameSrc(id, expr, f) { return "art/chr/" + id + "-" + expr + "-" + f + ".webp"; }
     /* positions depend on how many sprites are on stage (logical order L, C, R is kept): 1 -> 540, 2 -> 360/720, 3 -> 250/540/830 of 1080 */
     function layout() {
@@ -176,46 +178,58 @@
       for (var k in c.imgs) c.imgs[k].style.visibility = (k === f) ? "visible" : "hidden";
       c.cur = f;
     }
+    var BIG_HOP = ["surprised", "shocked", "cheer", "baffled"], SHAKE_EXPR = ["surprised", "shocked"];
     function setChar(slot, spec) {
       if (!spec) { removeChar(slot); return; }
       var cur = sprites[slot];
-      if (cur && cur.id === spec.id && cur.expr === spec.expr) return;
+      if (cur && cur.id === spec.id && cur.expr === spec.expr) { if (spec.frame && cur.imgs[spec.frame]) showFrame(cur, spec.frame); return; }
       var frames = frameNames(spec.id, spec.expr).filter(function (f) { return have("chr", spec.id + "-" + spec.expr + "-" + f); });
       if (!frames.length) { removeChar(slot); return; }               // no art yet: nothing drawn (text placeholder only)
       var swap = !!(cur && cur.id === spec.id);
-      if (cur) removeChar(slot, swap);
+      var old = cur;
+      if (cur) { if (swap) { sprites[slot] = null; cur.alive = false; } else removeChar(slot, false); }
       var wrap = el("div", "chr " + slot), scl = el("div", "scl"), bob = el("div", "bob");
-      var c = { id: spec.id, expr: spec.expr, wrap: wrap, imgs: {}, frames: frames, alive: true, cur: frames[0], special: !!(A.chars[spec.id].special && A.chars[spec.id].special[spec.expr]) };
-      var loaded = 0;
+      var canvas = A.chars[spec.id].canvas && A.chars[spec.id].canvas[spec.expr];
+      if (canvas) { wrap.classList.add("land"); wrap.style.width = pct(canvas[0] / A.stage.w * 100); wrap.style.aspectRatio = canvas[0] + "/" + canvas[1]; wrap.style.height = "auto"; }
+      var c = { id: spec.id, expr: spec.expr, wrap: wrap, imgs: {}, frames: frames, alive: true, cur: frames[0], special: isSpecial(spec.id, spec.expr) };
       frames.forEach(function (f) {
         var im = new Image(); im.alt = ""; im.draggable = false; im.className = "sprite";
         im.onerror = function () { delete c.imgs[f]; if (im.parentNode) im.parentNode.removeChild(im); c.frames = c.frames.filter(function (x) { return x !== f; }); if (!c.frames.length) removeChar(slot, true); };
-        im.src = frameSrc(spec.id, spec.expr, f);
         c.imgs[f] = im; bob.appendChild(im);
       });
       scl.appendChild(bob); wrap.appendChild(scl);
       c.scl = scl;
       wrap.style.animationDelay = "0s"; bob.style.animationDelay = (-Math.random() * 2.4).toFixed(2) + "s";
-      var anim = swap ? "hop" : (spec.anim || (slot === "L" ? "slide-l" : slot === "R" ? "slide-r" : "fade"));
+      var big = swap && BIG_HOP.indexOf(spec.expr) >= 0;
+      var anim = swap ? (big ? "hop-big" : "hop") : (spec.anim || (slot === "L" ? "slide-l" : slot === "R" ? "slide-r" : "fade"));
       wrap.classList.add("in-" + anim);
+      if (swap && SHAKE_EXPR.indexOf(spec.expr) >= 0) shake();
+      /* on an expression swap keep the old sprite until the new first frame has loaded (no blank flash) */
+      var first = spec.frame && c.imgs[spec.frame] ? spec.frame : frames[0];
+      var done = false;
+      function ready() { if (done) return; done = true; if (old && old.wrap.parentNode) old.wrap.parentNode.removeChild(old.wrap); wrap.style.visibility = ""; }
+      wrap.style.visibility = old ? "hidden" : "";
+      c.imgs[first].onload = ready; timers.push(setTimeout(ready, 1500));
+      frames.forEach(function (f) { c.imgs[f].src = frameSrc(spec.id, spec.expr, f); });
       chL.appendChild(wrap);
-      sprites[slot] = c; layout(); showFrame(c, c.frames[0]);
-      if (c.special) breathe(c); else blink(c);
+      sprites[slot] = c; layout(); showFrame(c, first);
+      if (c.special) { if (isBreathing(spec.id, spec.expr)) breathe(c); } else blink(c);
     }
-    function blink(c) {   // b frame for 110 ms every 2.5-5 s
+    function shake() { s.classList.remove("shake"); void s.offsetWidth; s.classList.add("shake"); timers.push(setTimeout(function () { s.classList.remove("shake"); }, 300)); }
+    function blink(c) {   // b frame for 110 ms every 3-5 s
       if (c.frames.indexOf("b") < 0) return;
       (function loop() {
         timers.push(setTimeout(function () {
           if (!c.alive) return;
           if (!(c.talkOn && c.cur === "c")) { showFrame(c, "b"); timers.push(setTimeout(function () { if (c.alive) showFrame(c, "a"); loop(); }, 110)); }
           else loop();
-        }, 2500 + Math.random() * 2500));
+        }, 3000 + Math.random() * 2000));
       })();
     }
     function breathe(c) {   // numeric frames alternate
       if (c.frames.length < 2) return;
       var i = 0;
-      (function loop() { timers.push(setTimeout(function () { if (!c.alive) return; i = (i + 1) % c.frames.length; showFrame(c, c.frames[i]); loop(); }, 1200)); })();
+      (function loop() { timers.push(setTimeout(function () { if (!c.alive) return; i = (i + 1) % c.frames.length; showFrame(c, c.frames[i]); loop(); }, 500)); })();
     }
     function talk(who, on) {   // a <-> c every 130 ms while the speaker's text is typing
       Object.keys(sprites).forEach(function (k) {
@@ -259,14 +273,26 @@
       (cue.add || []).forEach(function (o) { addProp(o); });
       (cue.overlay || []).forEach(function (o) {
         var txt = L.overlay && L.overlay[o.text]; if (!txt) return;
-        ovL.appendChild(el("div", "ovl in-" + (o.anim || "fade"), esc(txt)));
+        var ov = el("div", "ovl in-" + (o.anim || "fade"), esc(txt));
+        if (o.y != null) ov.style.top = pct(o.y);
+        ovL.appendChild(ov);
+        if (o.ms) timers.push(setTimeout(function () { ov.parentNode && ov.parentNode.removeChild(ov); }, o.ms));
       });
       if (cue.bgfx) {
         if (cue.bgfx.dark != null) { bgfx.style.opacity = cue.bgfx.dark; }
         if (cue.bgfx.grayscale != null) bgL.style.filter = "grayscale(" + cue.bgfx.grayscale + ")";
       }
+      (cue.fx || []).forEach(function (o) {   // CSS-only effects
+        if (o.id === "dust-puff") {
+          var d = el("div", "dust in-puff" + (o.flip ? " flip" : "")); d.style.left = pct(o.x); d.style.top = pct(o.y != null ? o.y : 76);
+          fxL.appendChild(d);
+        }
+      });
+      if (cue.glyph === "x") {   // X glyph drawn with SVG (no logo asset)
+        ovL.appendChild(el("div", "xglyph in-pop", '<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M18 18 L82 82 M82 18 L18 82" stroke="#fff" stroke-width="12" stroke-linecap="round" fill="none"/></svg>'));
+      }
       (cue.stage || []).forEach(function (e) {
-        if (e === "shake") { s.classList.remove("shake"); void s.offsetWidth; s.classList.add("shake"); }
+        if (e === "shake") shake();
       });
     }
 
@@ -279,10 +305,25 @@
       function finish() { clearInterval(iv); node.textContent = text; typing = null; talk(speaker, false); done && done(); }
       typing = finish;
     }
+    var seqPending = [], seqT = [], busy = false;
+    function flushSeq() { seqT.forEach(clearTimeout); seqT = []; var p = seqPending; seqPending = []; p.forEach(function (e) { apply(e); }); }
+    function runSeq(list) {   // timeline: [{t, ...cue fields}]
+      seqPending = list.slice();
+      list.forEach(function (e) { seqT.push(setTimeout(function () { var i = seqPending.indexOf(e); if (i >= 0) { seqPending.splice(i, 1); apply(e); } }, e.t || 0)); });
+    }
+    /* a short cut-scene beat before the line (e.g. Elon asleep on the factory floor), dialog hidden meanwhile */
+    function runBeat(beat, st) {
+      busy = true; dlg.style.visibility = "hidden";
+      setBg(beat.bg, st.kind, null);
+      ["L", "C", "R"].forEach(function (k) { setChar(k, beat.chars && beat.chars[k] || null); });
+      timers.push(setTimeout(function () { busy = false; dlg.style.visibility = ""; st.beatDone = true; render(); }, beat.ms || 700));
+    }
     function render() {
-      var st = steps[n];
+      var st = steps[n], cue = A.cues && A.cues[st.key];
+      flushSeq();
+      if (cue && cue.beat && !st.beatDone) { runBeat(cue.beat, st); return; }
       setBg(st.bg, st.kind, null);
-      apply(A.cues && A.cues[st.key]);
+      if (cue && cue.seq) runSeq(cue.seq); else apply(cue);
       dlg.innerHTML = "";
       speaker = null;
       if (st.type === "line") {
@@ -311,6 +352,7 @@
       }
     }
     s.onclick = function () {   // tap anywhere on the stage (dialog included) advances lines; choice/end need their button
+      if (busy) return;
       if (typing) { typing(); return; }
       if (steps[n].type === "end" || steps[n].type === "choice") return;
       n++; render();

@@ -22,6 +22,7 @@ ko: {
       opts: ["네, 절차를 따릅니다", "아니요, 급하면 건너뜁니다"],
       short: ["절차를 따른다", "급하면 건너뛴다"] }
   ],
+  overlay: { thud: "쿵!" },
   choiceTitle: "당신의 선택",
   replay: "다시 플레이",
   badTags: ["BAD ENDING 2 · 컨설팅 파산", "BAD ENDING 1 · 회의 무한 루프", "BAD ENDING 3 · 로봇 박물관", "BAD ENDING 4 · 완공 파산"],
@@ -126,6 +127,7 @@ en: {
       opts: ["Yes, I follow the process", "No, I skip it when it's urgent"],
       short: ["Follow the process", "Skip it when urgent"] }
   ],
+  overlay: { thud: "THUD" },
   choiceTitle: "Your choice",
   replay: "Play again",
   badTags: ["BAD ENDING 2 · Consulted into Bankruptcy", "BAD ENDING 1 · The Infinite Meeting Loop", "BAD ENDING 3 · The Robot Museum", "BAD ENDING 4 · Built, Then Bankrupt"],
