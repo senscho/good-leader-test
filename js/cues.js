@@ -43,7 +43,7 @@ window.ART = {
      bgfx {dark, grayscale}, overlay [{id, text, anim}], counter {id, from, to, ms}.  A background change clears props/fx/overlay and sprites. */
   cues: {
     /* Logical slots: Elon C, engineer L, board / consultant R (plus Elon R in the match ending); the real x comes from `layouts` by sprite count.
-       Speaker: front, full size, bright, talking (a<->c every 130 ms while the line types); the others scale .88, dimmed, behind. Blink: b for 110 ms every 3-5 s.
+       Speaker: front, full size, bright, talking (a<->c every 130 ms while the line types); the others stay full size, dimmed, behind. Blink: b for 110 ms every 3-5 s.
        A background change clears every sprite, so each scene re-adds who is in it. Expressions follow art-plan-v1.md section 3 (s12 gives the frame sets). */
 
     /* ---- trust / meeting-room (intro + decision 1) ---- */

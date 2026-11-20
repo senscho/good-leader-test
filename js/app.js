@@ -243,7 +243,7 @@
         } else if (c.alive && c.cur === "c") showFrame(c, "a");
       });
     }
-    function spotlight(who, dimAll) {   // speaker: scale 1, front, bright. Other sprites while someone speaks: scale .88, dimmed, behind. Narrator: neutral. Choice: all dimmed.
+    function spotlight(who, dimAll) {   // speaker: scale 1, front, bright. Other sprites while someone speaks: dimmed, behind (no scaling). Narrator: neutral. Choice: all dimmed.
       var isChar = CHAR_IDS.indexOf(who) >= 0;
       var warm = (A.warmBg || []).indexOf(curBg) >= 0 ? (A.warmFilter || "") : "";     // sunset scenes tint the sprites, composed with the dimming below
       Object.keys(sprites).forEach(function (k) {
@@ -251,7 +251,7 @@
         var me = !dimAll && isChar && c.id === who, other = !dimAll && isChar && !me;
         var dim = dimAll ? "brightness(.6)" : (other ? "brightness(.75)" : "");
         c.wrap.style.filter = (warm + " " + dim).trim();
-        c.scl.style.transform = other ? "scale(.88)" : "scale(1)";
+        c.scl.style.transform = "scale(1)";   // all sprites stay at full size; overlap is fine, the speaker is in front
         c.wrap.style.zIndex = me ? 3 : (k === "C" ? 2 : 1);
       });
     }
