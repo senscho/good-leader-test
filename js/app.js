@@ -18,6 +18,11 @@
   function pastel(sec) {   // title + survey: bg-title behind a white wash (css .pastel)
     if (have("bg", "title")) { sec.style.backgroundImage = 'url("art/bg/bg-title.webp")'; setBackdrop("art/bg/bg-title.webp"); } else setBackdropNone();
   }
+  function credit() {   // creator X handle + link (title + ending)
+    var c = el("div", "credit", 'made by <a href="https://x.com/SiliconPhd" target="_blank" rel="noopener">@SiliconPhd</a>');
+    c.onclick = function (e) { e.stopPropagation(); };
+    return c;
+  }
   var ICONS = ["q-worklife", "q-trust", "q-giveup", "q-protocol"];   // by question index
   function title() {
     clear(); answers = []; L = null;
@@ -38,7 +43,7 @@
     var note = el("div", "dim sound-note"); note.style.marginTop = "14px";
     function soundNote(m) { note.textContent = m ? "🔇 소리가 꺼져 있어요 · Sound is off" : "🔊 소리가 켜져 있어요 (무음 모드면 안 들려요) · Sound on (silent mode mutes it)"; }
     soundNote(GameAudio.isMuted()); GameAudio.onMute = soundNote;
-    card.appendChild(note); s.appendChild(card);
+    card.appendChild(note); card.appendChild(credit()); s.appendChild(card);
     if (have("fx", "sparkle")) [["16%", "20%", "0s"], ["82%", "30%", "1.1s"]].forEach(function (q) {
       var sp = new Image(); sp.alt = ""; sp.className = "fxi in-twinkle"; sp.src = "art/fx/fx-sparkle.webp";
       sp.style.left = q[0]; sp.style.top = q[1]; sp.style.width = "11%"; sp.style.animationDelay = q[2]; s.appendChild(sp);
@@ -509,7 +514,7 @@
         box.appendChild(el("div", "tag" + (last.kind === "bad" ? "" : " ok"), esc(last.tag || "")));
         var b = el("button", "btn primary", esc(L.replay));
         b.onclick = function (e) { e.stopPropagation(); GameAudio.event("ui.click"); GameAudio.bgmStop(1000); title(); };
-        box.appendChild(b); box.appendChild(el("div", "disc", esc(L.disclaimer))); dlg.appendChild(box);
+        box.appendChild(b); box.appendChild(el("div", "disc", esc(L.disclaimer))); box.appendChild(credit()); dlg.appendChild(box);
       }
     }
     s.onclick = function () {   // tap anywhere on the stage (dialog included) advances lines; choice/end need their button
