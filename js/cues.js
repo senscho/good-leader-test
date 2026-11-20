@@ -4,7 +4,7 @@
    (backgrounds) or is simply not drawn (sprites/props/fx). When Mika delivers a new file: add its name to `have`. */
 window.ART = {
   have: {
-    bg:  ["meeting-room", "factory-night", "automation-line", "parking-dusk", "tent-line", "true-sky"],   // art/bg/bg-<id>.webp
+    bg:  ["meeting-room", "factory-night", "automation-line", "parking-dusk", "tent-line", "true-sky", "title", "bad-lobby", "bad-dark-factory", "bad-robot-museum", "bad-opening"],   // art/bg/bg-<id>.webp
     chr: [   // art/chr/<char>-<expr>-<frame>.webp  (a = base, b = blink, c = talk)
       "board-annoyed-a", "board-annoyed-b", "board-annoyed-c", "board-baffled-a",
       "board-baffled-b", "board-baffled-c", "board-stern-a", "board-stern-b",
@@ -18,10 +18,11 @@ window.ART = {
       "engineer-cheer-b", "engineer-cheer-c", "engineer-neutral-a", "engineer-neutral-b",
       "engineer-neutral-c", "engineer-puzzled-a", "engineer-puzzled-b", "engineer-puzzled-c",
       "engineer-shocked-a", "engineer-shocked-b", "engineer-shocked-c", "engineer-worried-a",
-      "engineer-worried-b", "engineer-worried-c"
+      "engineer-worried-b", "engineer-worried-c",
+      "crowd-cheer-1", "crowd-cheer-2", "workers-line", "visitors"   // crowds / props drawn as props (kind chr)
     ],
-    prop: ["rocket", "sink", "bird", "car", "chart-up", "ai-orb", "cursor-arrow", "tent"],   // art/prop/prop-<name>.webp
-    fx: ["smoke-trail", "dust-puff", "sparkle"],                                             // art/fx/fx-<name>.webp
+    prop: ["rocket", "sink", "bird", "car", "chart-up", "ai-orb", "cursor-arrow", "tent", "order-boxes", "hourglass", "slide-allgreen", "wall-clock", "home-bubble", "sleeping-bag", "robot-arm", "permit-stack", "mug-star", "chart-down", "calendar-stack", "minutes-pile", "report-stack-1", "report-stack-2", "report-stack-3", "refund-envelopes", "invoice", "shutter", "ticket", "velvet-rope", "stamp", "cobweb", "notice-paper", "q-trust", "q-worklife", "q-giveup", "q-protocol"],   // art/prop/prop-<name>.webp
+    fx: ["smoke-trail", "dust-puff", "sparkle", "sweat"],                                             // art/fx/fx-<name>.webp
     logo: ["x", "spacex", "xai", "tesla"]                                                    // art/logo/logo-<name>.svg (official marks, bundled locally)
   },
   /* per-background sprite filter (composed with the speaker dimming): sunset scenes get a warm tint, bright bad-ending scenes get brightness/saturate matching */
