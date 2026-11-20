@@ -228,6 +228,7 @@
         var c = sprites[k]; if (!c) return;
         var isChar = CHAR_IDS.indexOf(who) >= 0;
         c.wrap.style.filter = dimAll ? "brightness(.6)" : (isChar && c.id !== who ? "brightness(.8)" : "");
+        c.wrap.style.zIndex = (!dimAll && isChar && c.id === who) ? 3 : (k === "C" ? 2 : 1);   // speaker in front when sprites overlap
       });
     }
 

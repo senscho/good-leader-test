@@ -5,7 +5,7 @@
 window.ART = {
   have: {
     bg:  ["meeting-room"],                 // art/bg/bg-<id>.webp
-    chr: ["elon-neutral-a"],               // art/chr/<char>-<expr>-<frame>.webp
+    chr: ["elon-neutral-a", "engineer-neutral-a", "board-stern-a", "consultant-smug-a"],   // art/chr/<char>-<expr>-<frame>.webp
     prop: [],                              // art/prop/prop-<name>[-<n>].webp
     fx: []                                 // art/fx/fx-<name>.webp
   },
@@ -23,7 +23,30 @@ window.ART = {
      cue fields: chars {L|C|R: {id, expr, anim} | null}, add/remove [{id, anim, delay, x, y, w, flip}], stage ["shake","dim-chars"],
      bgfx {dark, grayscale}, overlay [{id, text, anim}], counter {id, from, to, ms}.  A background change clears props/fx/overlay and sprites. */
   cues: {
-    /* trust / meeting-room scene: Elon stands at x 540 from the first line through decision 1 */
-    "intro.0": { chars: { C: { id: "elon", expr: "neutral", anim: "fade" } } }
+    /* Layout: Elon C (x 540), engineer L (x 300), board / consultant R (x 780). The speaker is drawn in front and bright, the others dim.
+       A background change clears every sprite, so each scene re-adds who is in it. Only the "neutral/stern/smug" a-frames exist so far. */
+    /* trust / meeting-room: Elon at C from the first line; engineer joins on his first line, board on hers and leaves before decision 1 */
+    "intro.0": { chars: { C: { id: "elon", expr: "neutral", anim: "fade" } } },
+    "intro.1": { chars: { L: { id: "engineer", expr: "neutral" } } },
+    "intro.2": { chars: { R: { id: "board", expr: "stern" } } },
+    "sit.1":   { chars: { R: null } },
+    /* decision situation lines are all spoken by the engineer */
+    "sit.0": { chars: { L: { id: "engineer", expr: "neutral" } } },
+    "sit.2": { chars: { L: { id: "engineer", expr: "neutral" } } },
+    "sit.3": { chars: { L: { id: "engineer", expr: "neutral" } } },
+    /* bad ending 1 (trust) - bad-dark-factory */
+    "bad.1.1": { chars: { R: { id: "board", expr: "stern" } } },
+    "bad.1.2": { chars: { L: { id: "engineer", expr: "neutral" } } },
+    "bad.1.6": { chars: { L: null, R: null } },
+    /* bad ending 2 (work-life) - bad-lobby: consultant R, engineer L, then the board replaces the engineer on L */
+    "bad.0.1": { chars: { R: { id: "consultant", expr: "smug" } } },
+    "bad.0.2": { chars: { L: { id: "engineer", expr: "neutral" } } },
+    "bad.0.5": { chars: { L: { id: "board", expr: "stern" } } },
+    /* bad ending 3 (automation) - bad-robot-museum */
+    "bad.2.1": { chars: { L: { id: "engineer", expr: "neutral" } } },
+    "bad.2.2": { chars: { R: { id: "board", expr: "stern" } } },
+    /* bad ending 4 (regulations) - bad-opening */
+    "bad.3.1": { chars: { L: { id: "engineer", expr: "neutral" } } },
+    "bad.3.2": { chars: { R: { id: "board", expr: "stern" } } }
   }
 };
