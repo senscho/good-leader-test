@@ -72,7 +72,7 @@
   function enqueue(files) { files.forEach(function (f) { queue = queue.then(function () { return load(f); }); }); }
   function startPreload() {
     if (preloadStarted) return; preloadStarted = true;
-    var order = ["bgm-pastel", "bgm-tension-a"];
+    var order = ["bgm-tension-a"];
     HAVE_S.forEach(function (n) { order.push("sfx-" + n); });
     ["wry", "wry-end", "tension-b", "tent", "true-piano", "true-strings", "true-drive", "true-choir", "true-final"].forEach(function (n) { if (HAVE_B.indexOf(n) >= 0) order.push("bgm-" + n); });
     order = order.filter(function (f) { var k = f.split("-")[0], n = f.slice(4); return k === "sfx" ? HAVE_S.indexOf(f.slice(4)) >= 0 : HAVE_B.indexOf(f.slice(4)) >= 0; });

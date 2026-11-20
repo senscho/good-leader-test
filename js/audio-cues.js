@@ -60,7 +60,7 @@ window.AUDIO = {
   },
   /* virtual events fired by app.js */
   events: {
-    "title.start":     { sfx: ["ui-start"], bgm: { play: "pastel", fade: 800 } },
+    "title.start":     { sfx: ["ui-start"] },
     "survey.select":   { sfx: ["ui-select"] },
     "survey.next":     { sfx: [{ id: "ui-swipe", t: 60 }] },
     "survey.flash":    { sfx: ["ui-flash"], bgm: { play: "tension-a", fade: 1200 } },
