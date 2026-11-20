@@ -3,3 +3,7 @@ art/**/*-v0*
 *-v0*
 _raw/
 **/_raw/
+audio/_raw/
+*.wav
+*.flac
+*.aif*

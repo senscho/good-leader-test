@@ -21,6 +21,7 @@
   var ICONS = ["q-worklife", "q-trust", "q-giveup", "q-protocol"];   // by question index
   function title() {
     clear(); answers = []; L = null;
+    GameAudio.reset();
     document.documentElement.lang = "ko";
     var s = el("section", "screen center pastel");
     pastel(s);
@@ -30,10 +31,14 @@
     [["ko", "한국어"], ["en", "English"]].forEach(function (p) {
       var b = el("button", "btn lang", p[1]);
       b.setAttribute("data-lang", p[0]);
-      b.onclick = function () { start(p[0]); };
+      b.onclick = function () { GameAudio.unlock(); GameAudio.event("title.start"); start(p[0]); };
       st.appendChild(b);
     });
-    card.appendChild(st); s.appendChild(card);
+    card.appendChild(st);
+    var note = el("div", "dim sound-note"); note.style.marginTop = "14px";
+    function soundNote(m) { note.textContent = m ? "🔇 소리가 꺼져 있어요 · Sound is off" : "🔊 소리가 켜져 있어요 (무음 모드면 안 들려요) · Sound on (silent mode mutes it)"; }
+    soundNote(GameAudio.isMuted()); GameAudio.onMute = soundNote;
+    card.appendChild(note); s.appendChild(card);
     if (have("fx", "sparkle")) [["16%", "20%", "0s"], ["82%", "30%", "1.1s"]].forEach(function (q) {
       var sp = new Image(); sp.alt = ""; sp.className = "fxi in-twinkle"; sp.src = "art/fx/fx-sparkle.webp";
       sp.style.left = q[0]; sp.style.top = q[1]; sp.style.width = "11%"; sp.style.animationDelay = q[2]; s.appendChild(sp);
@@ -69,8 +74,9 @@
       b.onclick = function () {
         if (s.getAttribute("data-done")) return; s.setAttribute("data-done", "1");
         answers[i] = { idx: i, elon: oi === 1, label: q.opts[oi] };
-        if (pos < 3) { if (icon) icon.className = "qicon out"; setTimeout(function () { question(pos + 1); }, icon ? 220 : 0); }
-        else { s.appendChild(el("div", "flash")); setTimeout(story, 160); }   // white flash, then the story
+        GameAudio.event("survey.select");
+        if (pos < 3) { GameAudio.event("survey.next"); if (icon) icon.className = "qicon out"; setTimeout(function () { question(pos + 1); }, icon ? 220 : 0); }
+        else { GameAudio.event("survey.flash"); s.appendChild(el("div", "flash")); setTimeout(story, 160); }   // white flash, then the story
       };
       st.appendChild(b);
     });
@@ -145,6 +151,7 @@
       bgL.appendChild(ph);
     }
     function clearScene() {
+      GameAudio.sceneClear();
       [pBack, pFront, fxL, ovL].forEach(function (x) { x.innerHTML = ""; });
       bgfx.style.opacity = 0; bgState = { sat: 1, gray: 0 }; bgL.style.filter = "";
       bgL.style.transition = "none"; bgL.style.transform = ""; void bgL.offsetWidth; bgL.style.transition = "";
@@ -316,6 +323,7 @@
       return out;
     }
     function removeThing(o) {
+      if (o.id === "alarm") GameAudio.stop("alarm", 150);
       layersFor(o.id, o.key).forEach(function (e) {
         if (o.anim) { e.classList.remove("in-pop", "in-drop", "in-fade", "in-wipe", "loop-float", "loop-spin", "loop-spin2", "loop-wobble"); e.classList.add("out-" + o.anim); timers.push(setTimeout(function () { e.parentNode && e.parentNode.removeChild(e); }, 520)); }
         else e.parentNode && e.parentNode.removeChild(e);
@@ -396,11 +404,12 @@
       });
     }
     function applyBgFilter() { bgL.style.filter = "saturate(" + bgState.sat + ") grayscale(" + bgState.gray + ")"; }
-    function apply(cue) {
+    function apply(cue, quiet) {   // quiet: replaying skipped steps (no sounds)
       if (!cue) return;
+      if (!quiet && (cue.sfx || cue.bgm || cue.sfxStop)) GameAudio.run(cue);
       if (cue.chars) Object.keys(cue.chars).forEach(function (k) { setChar(k, cue.chars[k]); });
       (cue.remove || []).forEach(removeThing);
-      (cue.add || []).forEach(addProp);
+      (cue.add || []).forEach(function (o) { var r = addProp(o); if (r && !quiet) GameAudio.auto("add", { id: o.id, anim: o.anim || "fade", delay: o.delay }); });
       (cue.mod || []).forEach(modThing);
       (cue.overlay || []).forEach(chip);
       if (cue.bgfx) {
@@ -411,6 +420,7 @@
       if (cue.zoom) { bgL.style.transformOrigin = cue.zoom.ox + "% " + cue.zoom.oy + "%"; bgL.style.transform = "scale(" + cue.zoom.s + ")"; }
       if (cue.propDim != null) { pBack.classList.toggle("dim", !!cue.propDim); pFront.classList.toggle("dim", !!cue.propDim); }
       (cue.fx || []).forEach(function (o) {
+        if (!quiet) GameAudio.auto("fx", { id: o.id, x: o.x != null ? o.x : (o.at ? slotX(o.at) : undefined) });
         if (o.id === "dust-puff") {
           var y = o.y != null ? o.y : 76;
           if (!fxImg("dust-puff", { x: o.x, y: y, w: o.w || 18, flip: o.flip }, "in-puffi", 800)) {   // no art: CSS puff
@@ -427,20 +437,20 @@
       });
       if (cue.launch) launch(cue.launch);
       if (cue.lines) lines(cue.lines);
-      (cue.stage || []).forEach(function (e) { if (e === "shake") shake(); });
+      (cue.stage || []).forEach(function (e) { if (e === "shake") { shake(); if (!quiet) GameAudio.auto("stage", { id: "shake" }); } });
     }
 
     function typeText(node, text, done) {
-      var i = 0; node.textContent = "";
+      var i = 0; node.textContent = ""; GameAudio.typing(true);
       var iv = setInterval(function () {
-        i++; node.textContent = text.slice(0, i);
+        i++; node.textContent = text.slice(0, i); GameAudio.tick(speaker, text.charAt(i - 1));
         if (i >= text.length) { finish(); }
       }, 22);
-      function finish() { clearInterval(iv); node.textContent = text; typing = null; talk(speaker, false); done && done(); }
+      function finish() { clearInterval(iv); node.textContent = text; typing = null; GameAudio.typing(false); talk(speaker, false); done && done(); }
       typing = finish;
     }
     var seqPending = [], seqT = [], busy = false;
-    function flushSeq() { seqT.forEach(clearTimeout); seqT = []; var p = seqPending; seqPending = []; p.forEach(function (e) { apply(e); }); }
+    function flushSeq() { seqT.forEach(clearTimeout); seqT = []; var p = seqPending; seqPending = []; p.forEach(function (e) { apply(e, true); }); }
     function runSeq(list) {   // timeline: [{t, ...cue fields}]
       seqPending = list.slice();
       list.forEach(function (e) { seqT.push(setTimeout(function () { var i = seqPending.indexOf(e); if (i >= 0) { seqPending.splice(i, 1); apply(e); } }, e.t || 0)); });
@@ -450,11 +460,12 @@
     function runBeat(beat, st) {
       busy = true; dlg.style.display = "none";
       setBg(beat.bg, st.kind, null);
+      GameAudio.cue(st.key + ".beat");
       ["L", "C", "R"].forEach(function (k) { setChar(k, beat.chars && beat.chars[k] || null); });
       var hint = el("div", "beat-hint", "▼"); s.appendChild(hint);
       timers.push(setTimeout(function () {   // short guard so the tap that opened the beat cannot skip it
         busy = false;
-        beatWait = function () { beatWait = null; if (hint.parentNode) hint.parentNode.removeChild(hint); dlg.style.display = ""; st.beatDone = true; render(); };
+        beatWait = function () { beatWait = null; GameAudio.cue(st.key + ".beatEnd"); if (hint.parentNode) hint.parentNode.removeChild(hint); dlg.style.display = ""; st.beatDone = true; render(); };
       }, beat.guard || 450));
     }
     function render() {
@@ -462,6 +473,7 @@
       flushSeq();
       if (cue && cue.beat && !st.beatDone) { runBeat(cue.beat, st); return; }
       setBg(st.bg, st.kind, null);
+      GameAudio.cue(st.key);
       apply(cue); if (cue && cue.seq) runSeq(cue.seq);
       dlg.innerHTML = "";
       speaker = null;
@@ -478,7 +490,7 @@
         dlg.appendChild(el("div", "choice-title", esc(L.choiceTitle)));
         var cb = el("button", "btn choice-btn", esc(st.pick.label));
         cb.setAttribute("data-opt", st.pick.elon ? "elon" : "trap");
-        cb.onclick = function (e) { e.stopPropagation(); n++; render(); };
+        cb.onclick = function (e) { e.stopPropagation(); GameAudio.event("ui.choicePress"); n++; render(); };
         dlg.appendChild(cb);
       } else {
         spotlight(null, false); talk(null, false);
@@ -486,7 +498,7 @@
         var box = el("div", "end-box");
         box.appendChild(el("div", "tag" + (last.kind === "bad" ? "" : " ok"), esc(last.tag || "")));
         var b = el("button", "btn primary", esc(L.replay));
-        b.onclick = function (e) { e.stopPropagation(); title(); };
+        b.onclick = function (e) { e.stopPropagation(); GameAudio.event("ui.click"); GameAudio.bgmStop(1000); title(); };
         box.appendChild(b); box.appendChild(el("div", "disc", esc(L.disclaimer))); dlg.appendChild(box);
       }
     }

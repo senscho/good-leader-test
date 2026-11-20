@@ -2,7 +2,7 @@
 
 (Repo: good-leader-test. The public title is deliberately a plain personality-test bait: no Elon/Tesla/billionaire hints on the title screen or in the survey; the reveal starts with the story intro after the survey. No art on title or survey.)
 
-Static, no build step, works offline (no external requests).
+Static, no build step, no external requests. Audio needs http(s) (`python3 -m http.server`); opening `index.html` from `file://` still plays, just without sound, because browsers block `fetch` of local files.
 
 ## Run
 - Open `index.html` directly, or `python3 -m http.server -d . 8000` and visit http://localhost:8000
@@ -13,6 +13,10 @@ Static, no build step, works offline (no external requests).
 - `css/style.css` — mobile-first styles (max width 480px, centered on desktop)
 - `js/i18n.js` — ALL text, Korean + English (questions, dialogue, placeholder descriptions)
 - `js/app.js` — game logic (title → 4 questions → result → VN ending → replay)
+- `js/audio-cues.js` — audio manifest (`AUDIO.have`, track/sfx table, automatic sound mapping, virtual events) and the per-line audio cues
+- `js/sfx.js` — the 50 synthesized sound effects (WebAudio recipes)
+- `js/audio.js` — audio engine (WebAudio only, mute button, ducking, stems)
+- `audio/` — 11 music files + 8 CC0 effect files (`LICENSES.md` has sources and licenses)
 
 ## Flow
 Title → 4-question survey (shuffled options) → one linear story. Each decision: situation line → "당신의 선택" with a single button (the survey answer) →
@@ -46,3 +50,14 @@ Direct files: `https://upload.wikimedia.org/wikipedia/commons/{c/ce/X_logo_2023.
 ## Notes
 - The consulting firm is deliberately unnamed.
 - Dialogue is satirical fiction except the facts listed in `../facts.md`; unverified items are marked TODO there.
+
+## Audio (art-plan-v1.md section 18)
+- 7 music tracks + 4 true-ending stems (`audio/bgm-*.mp3`, original synthesized music, stereo 32 kHz MP3), 8 CC0 effect files (`audio/sfx-*.mp3`, mono), 50 effects synthesized in the browser (`js/sfx.js`). About 1.5 MB (1.47 MB of audio files) for a full playthrough, nothing is requested at runtime from other sites.
+- Everything plays through WebAudio. The AudioContext is created in the tap on a language button (or the first tap anywhere); nothing plays before that, so there are no autoplay errors. The page pauses audio when the tab is hidden.
+- Mute button: top right, always visible. Default is sound ON: change `AUDIO_DEFAULT_MUTED` at the top of `js/audio-cues.js`. The choice is saved in `localStorage` (`glt-muted`).
+- Cue keys are the same as `js/cues.js`. In `AUDIO.cues[key]` use `bgm`, `sfx`, `sfxStop` (and `seq: [{t, ...}]`); `AUDIO.events` holds the virtual keys (`title.start`, `survey.select`, `survey.next`, `survey.flash`, `ui.choicePress`, `ui.click`). `AUDIO.auto` plays default sounds for stage actions (prop pop/drop/slide, dust, sparkle, shake...). A sound whose file is missing or not listed in `AUDIO.have` is skipped silently.
+- BGM loops are sample-exact (decoder gapless playback; the engine also sets `loopEnd`). Stems share one start time.
+- Tests used: headless Chromium, all 4 bad endings + the true ending in ko and en, no console errors or 404s.
+
+### Audio credits
+See `audio/LICENSES.md` (the 8 effect files are CC0 from Freesound; the music and the other effects are original).

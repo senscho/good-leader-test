@@ -164,3 +164,9 @@ h1 em{font-style:normal;color:var(--gold);display:block;font-size:16px;letter-sp
 .qicon{display:block;width:96px;height:96px;margin:0 auto 12px;animation:popp .34s cubic-bezier(.34,1.56,.64,1) both}
 .qicon.out{animation:exitup .22s ease-in forwards}
 .spark2{position:absolute;width:44px;height:auto;z-index:1}
+
+/* mute button: always visible, top right of the 480px stage (44x44) */
+.mute-btn{position:fixed;top:max(8px,env(safe-area-inset-top));right:max(8px,calc((100vw - 480px)/2 + 8px));width:44px;height:44px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(14,17,26,.6);color:#fff;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:60;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);-webkit-tap-highlight-color:transparent}
+.mute-btn:active{transform:scale(.94)}
+.pastel>.progress{margin-right:52px}
+.sound-note{font-size:12px}
